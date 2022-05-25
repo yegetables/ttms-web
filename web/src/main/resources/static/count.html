@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+  <script type="text/javascript">
+    $.ajax({
+      type: "POST",
+      contentType: "application/json; charset=utf-8",
+      url: 'http://124.71.197.6:8080/count',
+      data: "{'id':1}",
+      dataType: "json",
+      success: function (data) {
+        console.log(data);
+      },
+      error: function (result) {
+        console.log("error");
+      }
+    });
+
+  </script>
+</head>
+<body>
+<div id="myDiv"><h2>Let AJAX change this text</h2></div>
+<button id="b01" type="button">Change Content</button>
+</body>
+</html>
