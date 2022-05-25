@@ -7,3 +7,10 @@ mybatis.mapper-locations=classpath:mapper/*.xml
 spring.redis.password=1254125
 spring.redis.host=localhost
 spring.redis.port=6379
+
+spring.redis.jedis.pool.max-active=8
+spring.redis.jedis.pool.max-idle=8
+spring.redis.jedis.pool.min-idle=0
+spring.redis.jedis.pool.max-wait=2000
+spring.redis.jedis.pool.test-on-borrow=true
+spring.redis.jedis.pool.test-while-idle=true
