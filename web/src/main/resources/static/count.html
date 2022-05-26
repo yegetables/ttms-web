@@ -9,7 +9,7 @@
       type: "POST",
       contentType: "application/json; charset=utf-8",
       url: 'http://124.71.197.6:8080/count',
-      data: "{'id':1}",
+      data: JSON.stringify({'id':1}),
       dataType: "json",
       success: function (data) {
         console.log(data);
