@@ -12,6 +12,11 @@
   <select id="getUserName" resultType="string" >
     select username
     from users
-    where id = #{id}
+    where id = #{uid}
+  </select>
+  <select id="queryPasswordByPhoneNum" resultType="java.lang.String">
+    select password
+    from users
+    where phoneNum=#{phoneNum}
   </select>
 </mapper>
