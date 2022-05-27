@@ -19,7 +19,7 @@ public class JsonTools {
     return !isGoodJson(json);
   }
 
-  public static boolean isGoodJson(String json)F {
+  public static boolean isGoodJson(String json) {
     if (StringUtils.isBlank(json)) return false;
     json = json.trim();
     if (json.startsWith("{") && json.endsWith("}")) {

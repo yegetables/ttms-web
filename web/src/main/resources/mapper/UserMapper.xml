@@ -9,7 +9,7 @@
     <result column="email" property="email"/>
     <result column="phoneNum" property="phoneNum"/>
   </resultMap>
-  <select id="getUserName" resultType="string" >
+  <select id="getUserName" resultType="string">
     select username
     from users
     where id = #{uid}
@@ -17,6 +17,6 @@
   <select id="queryPasswordByPhoneNum" resultType="java.lang.String">
     select password
     from users
-    where phoneNum=#{phoneNum}
+    where phoneNum = #{phoneNum}
   </select>
 </mapper>
