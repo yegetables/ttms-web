@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xupt.common.ServerResponse;
 import com.xupt.dao.UserMapper;
 import com.xupt.pojo.User;
+import com.xupt.utils.PHPass;
 import com.xupt.utils.RedisUtils;
 import com.xupt.utils.TokenUtils;
 import java.util.Map;
@@ -52,21 +53,19 @@ public class LoginController {
     queryWrapper.eq("phoneNum", phoneNum);
     User user = userMapper.selectOne(queryWrapper);
     String uid = String.valueOf(user.getUid());
-    if (password.equals(queryPassword)) {
-
-      // result.put("uid",uid);
-      String token = new TokenUtils().getToken(uid);
-      log.info("[Success]token生成成功");
-      // System.out.println(token);
-      redisUtils.set(uid, token, 14 * 24 * 60 * 60);
-      response.addHeader("Access-Control-Expose-Headers", "token");
-      response.addHeader("token", token);
-      log.info("[Success]登录成功");
-      return ServerResponse.createBySuccessMsgData("登录成功", user);
-    } else {
+    if (!PHPass.CheckPassword(password, queryPassword)) {
       log.info("[Warn]该用户密码错误");
       return ServerResponse.createByErrorMsg("登录失败");
     }
+    // result.put("uid",uid);
+    String token = new TokenUtils().getToken(uid);
+    log.info("[Success]token生成成功");
+    // System.out.println(token);
+    redisUtils.set(uid, token, 14 * 24 * 60 * 60);
+    response.addHeader("Access-Control-Expose-Headers", "token");
+    response.addHeader("token", token);
+    log.info("[Success]登录成功");
+    return ServerResponse.createBySuccessMsgData("登录成功", user);
   }
 
   @RequestMapping(value = "/count", method = RequestMethod.POST)
