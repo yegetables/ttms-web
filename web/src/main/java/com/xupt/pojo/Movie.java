@@ -1,8 +1,10 @@
 package com.xupt.pojo;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import org.springframework.stereotype.Component;
 
 @TableName("movie")
+@Component
 public class Movie {
   private String movie_name;
   private String movie_status;

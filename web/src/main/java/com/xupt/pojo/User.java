@@ -12,12 +12,17 @@ import org.springframework.stereotype.Component;
 @Component
 @TableName("users")
 public class User {
-  private Integer uid;
+
+  private String uid;
   private String username;
   private String password;
   private String email;
   private String phoneNum;
   private String headUrl;
-  private int age;
+  private long age;
   private String gender;
+
+
+
+
 }
