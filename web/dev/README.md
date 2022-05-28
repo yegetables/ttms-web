@@ -4,7 +4,7 @@
 
 ### Java Format
 
-TiSpark formats its code using [Google-Java-Format Maven Plugin](https://github.com/coveooss/fmt-maven-plugin) which follows Google's code styleguide. It is also checked on CI before build.
+ttms-web formats its code using [Google-Java-Format Maven Plugin](https://github.com/coveooss/fmt-maven-plugin) which follows Google's code styleguide. It is also checked on CI before build.
 
 1. In Intellij IDEA
 
