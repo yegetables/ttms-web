@@ -103,7 +103,7 @@ public class LoginController {
    */
   @PostMapping("/login/byCode")
   @ResponseBody
-  public ServerResponse<String> loginByCode(
+  public ServerResponse<User> loginByCode(
       @RequestParam("phoneNum") String phoneNum,
       @RequestParam("code") String code, HttpServletResponse response) {
     String getCode = redisUtils.get(phoneNum + "code");
@@ -122,7 +122,7 @@ public class LoginController {
     response.addHeader("Access-Control-Expose-Headers", "token");
     response.addHeader("token", token);
     log.info("[Success]登录成功");
-    return ServerResponse.createBySuccessMsg("登录成功");
+    return ServerResponse.createBySuccessMsgData("登录成功",user);
   }
 
   /*
