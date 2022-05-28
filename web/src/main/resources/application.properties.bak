@@ -14,3 +14,6 @@ spring.redis.jedis.pool.min-idle=0
 spring.redis.jedis.pool.max-wait=2000
 spring.redis.jedis.pool.test-on-borrow=true
 spring.redis.jedis.pool.test-while-idle=true
+
+mybatis-plus.configuration.map-underscore-to-camel-case=false
+mybatis-plus.global-config.db-column-underline=false
