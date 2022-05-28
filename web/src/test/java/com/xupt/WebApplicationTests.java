@@ -13,7 +13,7 @@ class WebApplicationTests {
     @Test
     void contextLoads() {
         System.out.println("test commit");
-      // userMapper.insert(new User(null,"XiAoRayL","0123456","1907402664@qq.com","13181003288",null,20,"男"));
+       userMapper.insert(new User(null,"XiAoRayL123","0123456","1907402665@qq.com","13181003287",null,20,"男"));
 
 
     }
