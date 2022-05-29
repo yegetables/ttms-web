@@ -22,7 +22,4 @@ public class User {
   private long age;
   private String gender;
 
-
-
-
 }

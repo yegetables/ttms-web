@@ -1,15 +1,17 @@
 package com.xupt.pojo;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
 import org.springframework.stereotype.Component;
 
 @TableName("movie")
 @Component
+@Data
 public class Movie {
   private String movie_name;
   private String movie_status;
   private int movie_minute;
-  private String movie_brief;//电影简介
+  private String movie_brief; // 电影简介
   private String movie_score;
   private String movie_money;
   private String movie_area;

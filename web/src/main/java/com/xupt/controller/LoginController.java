@@ -25,14 +25,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class LoginController {
 
-  @Autowired
-  private UserMapper userMapper;
-  @Autowired
-  private RedisUtils redisUtils;
-  @Autowired
-  private MailTools mailTools;
-  @Autowired
-  private PHPass phPass;
+  @Autowired private UserMapper userMapper;
+  @Autowired private RedisUtils redisUtils;
+  @Autowired private MailTools mailTools;
+  @Autowired private PHPass phPass;
   // @Autowired private RedisTemplate redisTemplate;
   /*
    * * 处理没有权限
@@ -103,7 +99,8 @@ public class LoginController {
   @ResponseBody
   public ServerResponse<User> loginByCode(
       @RequestParam("phoneNum") String phoneNum,
-      @RequestParam("code") String code, HttpServletResponse response) {
+      @RequestParam("code") String code,
+      HttpServletResponse response) {
     String getCode = redisUtils.get(phoneNum + "code");
     if (!getCode.equals(code)) {
       log.info("[Error]登录失败");
@@ -120,7 +117,7 @@ public class LoginController {
     response.addHeader("Access-Control-Expose-Headers", "token");
     response.addHeader("token", token);
     log.info("[Success]登录成功");
-    return ServerResponse.createBySuccessMsgData("登录成功",user);
+    return ServerResponse.createBySuccessMsgData("登录成功", user);
   }
 
   /*
