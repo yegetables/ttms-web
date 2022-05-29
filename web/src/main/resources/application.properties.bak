@@ -29,3 +29,10 @@ mail.password=123456
 mail.subject=TTMS-web AuthCode
 mail.defaultEncoding=utf-8
 mail.port=465
+
+# oos
+oos.endpoint: oss-cn-beijing.aliyuncs.com
+oos.keyid: 1234523634
+oos.keysecret: aasdhgsdrhsrtrhjs
+oos.bucketname: presist
+oos.filehost: head

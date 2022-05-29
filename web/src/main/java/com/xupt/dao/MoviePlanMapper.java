@@ -5,6 +5,4 @@ import com.xupt.pojo.MoviePlan;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface MoviePlanMapper extends BaseMapper<MoviePlan> {
-
-}
+public interface MoviePlanMapper extends BaseMapper<MoviePlan> {}
