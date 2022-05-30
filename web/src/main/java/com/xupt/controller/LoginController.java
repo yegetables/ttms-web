@@ -5,6 +5,7 @@ import com.xupt.common.ResponseCode;
 import com.xupt.common.ServerResponse;
 import com.xupt.pojo.Users;
 import com.xupt.service.IUsersService;
+import com.xupt.utils.CodeUtils;
 import com.xupt.utils.MailTools;
 import com.xupt.utils.PHPass;
 import com.xupt.utils.RandomUtils;
@@ -32,7 +33,7 @@ public class LoginController {
   @Autowired private RedisUtils redisUtils;
   @Autowired private MailTools mailTools;
   @Autowired private PHPass phPass;
-
+ @Autowired private CodeUtils codeUtils;
   @Autowired private IUsersService usersService;
 
   /** 处理没有权限 */
@@ -91,6 +92,7 @@ public class LoginController {
   /*
    * * 手机验证码发送
    */
+
   @PostMapping("/login/codePhoneSend")
   public ServerResponse<String> codePhoneSend(@RequestParam("phoneNum") String phoneNum) {
     String code = RandomUtils.randomCode();
@@ -104,6 +106,7 @@ public class LoginController {
 
     //    String mailAddress = user.getEmail();
     //    mailTools.sendSimpleMail(mailAddress, code);
+    codeUtils.SendCode(phoneNum);
     redisUtils.set(phoneNum + "code", code, 60);
     return ServerResponse.createBySuccessMsg("发送成功");
   }
