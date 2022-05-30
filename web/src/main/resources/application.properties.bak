@@ -36,3 +36,7 @@ oos.keyid: 1234523634
 oos.keysecret: aasdhgsdrhsrtrhjs
 oos.bucketname: presist
 oos.filehost: head
+
+# authCode
+codeSend.secretId=azsglkasegklsdfjghaws
+codeSend.secretKey=sdlkngasdophoserh
