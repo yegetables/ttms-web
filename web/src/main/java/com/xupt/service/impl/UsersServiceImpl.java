@@ -5,7 +5,6 @@ import com.xupt.dao.UsersMapper;
 import com.xupt.pojo.Users;
 import com.xupt.service.IUsersService;
 import com.xupt.utils.UsersUtils;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

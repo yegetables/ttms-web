@@ -13,7 +13,6 @@ public class MyBatisPlusConfig {
     // 设置最大单页限制数量，默认 500 条，-1 不受限制
     // paginationInterceptor.setLimit(500);
     // 开启 count 的 join 优化,只针对部分 left join
-    return  new PaginationInterceptor();
+    return new PaginationInterceptor();
   }
-
 }
