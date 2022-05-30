@@ -7,41 +7,26 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-/**
- * <p>
- * 
- * </p>
- *
- * 
- * @since 2022-05-30
- */
+/** @since 2022-05-30 */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("area")
 public class Area extends Model<Area> {
 
-    private static final long serialVersionUID=1L;
+  private static final long serialVersionUID = 1L;
 
-    /**
-     * 区的id
-     */
-    private Integer id;
+  /** 区的id */
+  private Integer id;
 
-    /**
-     * 区的名字
-     */
-    private String areaName;
+  /** 区的名字 */
+  private String areaName;
 
-    /**
-     * 市的id
-     */
-    private Integer cityId;
+  /** 市的id */
+  private Integer cityId;
 
-
-    @Override
-    protected Serializable pkVal() {
-        return null;
-    }
-
+  @Override
+  protected Serializable pkVal() {
+    return null;
+  }
 }

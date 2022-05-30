@@ -6,7 +6,6 @@ import com.xupt.pojo.MovieComment;
 /**
  * 服务类
  *
- * 
  * @since 2022-05-30
  */
 public interface IMovieCommentService extends IService<MovieComment> {}

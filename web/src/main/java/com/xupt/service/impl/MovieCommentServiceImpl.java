@@ -7,14 +7,10 @@ import com.xupt.service.IMovieCommentService;
 import org.springframework.stereotype.Service;
 
 /**
- * <p>
- *  服务实现类
- * </p>
+ * 服务实现类
  *
- * 
  * @since 2022-05-30
  */
 @Service
-public class MovieCommentServiceImpl extends ServiceImpl<MovieCommentMapper, MovieComment> implements IMovieCommentService {
-
-}
+public class MovieCommentServiceImpl extends ServiceImpl<MovieCommentMapper, MovieComment>
+    implements IMovieCommentService {}

@@ -6,7 +6,6 @@ import com.xupt.pojo.AreaCinemas;
 /**
  * Mapper 接口
  *
- * 
  * @since 2022-05-30
  */
 public interface AreaCinemasMapper extends BaseMapper<AreaCinemas> {}

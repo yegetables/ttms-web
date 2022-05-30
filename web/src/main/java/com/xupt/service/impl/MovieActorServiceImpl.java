@@ -7,14 +7,10 @@ import com.xupt.service.IMovieActorService;
 import org.springframework.stereotype.Service;
 
 /**
- * <p>
- *  服务实现类
- * </p>
+ * 服务实现类
  *
- * 
  * @since 2022-05-30
  */
 @Service
-public class MovieActorServiceImpl extends ServiceImpl<MovieActorMapper, MovieActor> implements IMovieActorService {
-
-}
+public class MovieActorServiceImpl extends ServiceImpl<MovieActorMapper, MovieActor>
+    implements IMovieActorService {}

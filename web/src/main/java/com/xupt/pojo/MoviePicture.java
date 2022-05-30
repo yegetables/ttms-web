@@ -9,33 +9,24 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-/**
- * <p>
- * 
- * </p>
- *
- * 
- * @since 2022-05-30
- */
+/** @since 2022-05-30 */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("movie_picture")
 public class MoviePicture extends Model<MoviePicture> {
 
-    private static final long serialVersionUID=1L;
+  private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+  @TableId(value = "id", type = IdType.AUTO)
+  private Integer id;
 
-    private Integer movieId;
+  private Integer movieId;
 
-    private String moviePicture;
+  private String moviePicture;
 
-
-    @Override
-    protected Serializable pkVal() {
-        return this.id;
-    }
-
+  @Override
+  protected Serializable pkVal() {
+    return this.id;
+  }
 }

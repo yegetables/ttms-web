@@ -7,14 +7,9 @@ import com.xupt.service.IUsersService;
 import org.springframework.stereotype.Service;
 
 /**
- * <p>
- *  服务实现类
- * </p>
+ * 服务实现类
  *
- * 
  * @since 2022-05-30
  */
 @Service
-public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements IUsersService {
-
-}
+public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements IUsersService {}

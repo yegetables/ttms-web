@@ -6,7 +6,6 @@ import com.xupt.pojo.CinemaMovies;
 /**
  * 服务类
  *
- * 
  * @since 2022-05-30
  */
 public interface ICinemaMoviesService extends IService<CinemaMovies> {}

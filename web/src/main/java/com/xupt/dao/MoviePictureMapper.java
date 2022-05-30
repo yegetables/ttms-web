@@ -4,13 +4,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xupt.pojo.MoviePicture;
 
 /**
- * <p>
- *  Mapper 接口
- * </p>
+ * Mapper 接口
  *
- * 
  * @since 2022-05-30
  */
-public interface MoviePictureMapper extends BaseMapper<MoviePicture> {
-
-}
+public interface MoviePictureMapper extends BaseMapper<MoviePicture> {}

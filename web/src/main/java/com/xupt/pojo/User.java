@@ -21,5 +21,4 @@ public class User {
   private String headUrl;
   private long age;
   private String gender;
-
 }

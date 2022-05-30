@@ -9,36 +9,25 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-/**
- * <p>
- * 
- * </p>
- *
- * 
- * @since 2022-05-30
- */
+/** @since 2022-05-30 */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("movie_sell")
 public class MovieSell extends Model<MovieSell> {
 
-    private static final long serialVersionUID=1L;
+  private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+  @TableId(value = "id", type = IdType.AUTO)
+  private Integer id;
 
-    private Integer sellId;
+  private Integer sellId;
 
-    /**
-     * 售票员赚得钱
-     */
-    private Float sellMoney;
+  /** 售票员赚得钱 */
+  private Float sellMoney;
 
-
-    @Override
-    protected Serializable pkVal() {
-        return this.id;
-    }
-
+  @Override
+  protected Serializable pkVal() {
+    return this.id;
+  }
 }
