@@ -43,6 +43,7 @@ public class loginInterceptor implements HandlerInterceptor {
         response.sendRedirect("/login403");
         return false;
       }
+      System.out.println(RedisToken);
       if (!headerToken.equals(RedisToken)) {
         log.info("[tokenError]token值不匹配");
         response.sendRedirect("/login403");
