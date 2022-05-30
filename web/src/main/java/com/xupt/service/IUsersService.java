@@ -2,6 +2,7 @@ package com.xupt.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xupt.pojo.Users;
+import java.util.List;
 
 /**
  * 服务类
@@ -13,4 +14,6 @@ public interface IUsersService extends IService<Users> {
   Users getUserInfo(Integer id);
 
   void register(Users newUsers);
+
+  List<Users> getAllUsers();
 }

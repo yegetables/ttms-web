@@ -41,18 +41,6 @@ public class LoginController {
     return ServerResponse.createByErrorMsg("没有权限");
   }
 
-  /**
-   * 去除敏感信息
-   *
-   * @param id uid
-   * @return 用户信息
-   */
-  @GetMapping("/getUserInfo")
-  public ServerResponse<Users> getUserInfo(@RequestParam("id") Integer id) {
-    Users users = usersService.getUserInfo(id);
-    if (users != null) return ServerResponse.createBySuccessMsgData("获取用户名成功", users);
-    return ServerResponse.createByErrorMsg("获取用户名失败");
-  }
 
   /**
    * 手机号或者邮箱+密码登录
