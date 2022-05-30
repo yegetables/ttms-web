@@ -54,7 +54,7 @@ public class LoginController {
       HttpServletResponse response) {
     String queryPassword = userMapper.queryPasswordByPhoneNum(phoneNum);
     QueryWrapper queryWrapper = new QueryWrapper();
-    queryWrapper.eq("phoneNum", phoneNum);
+    queryWrapper.eq("phone_num", phoneNum);
     User user = userMapper.selectOne(queryWrapper);
     String uid = String.valueOf(user.getUid());
     if (!PHPass.CheckPassword(password, queryPassword)) {
@@ -80,7 +80,7 @@ public class LoginController {
   public ServerResponse<String> codeSend(@RequestParam("phoneNum") String phoneNum) {
     String code = RandomUtils.randomCode();
     QueryWrapper queryWrapper = new QueryWrapper();
-    queryWrapper.eq("phoneNum", phoneNum);
+    queryWrapper.eq("phone_num", phoneNum);
     User user = userMapper.selectOne(queryWrapper);
     if (user == null) {
       return ServerResponse.createByErrorMsg("该用户不存在");
@@ -107,7 +107,7 @@ public class LoginController {
       return ServerResponse.createByErrorMsg("验证码错误");
     }
     QueryWrapper queryWrapper = new QueryWrapper();
-    queryWrapper.eq("phoneNum", phoneNum);
+    queryWrapper.eq("phone_num", phoneNum);
     User user = userMapper.selectOne(queryWrapper);
     String uid = String.valueOf(user.getUid());
     String token = new TokenUtils().getToken(uid);
@@ -127,7 +127,7 @@ public class LoginController {
   @ResponseBody
   public ServerResponse<String> register(User user) {
     QueryWrapper queryWrapper = new QueryWrapper();
-    queryWrapper.eq("phoneNum", user.getPhoneNum());
+    queryWrapper.eq("phone_num", user.getPhoneNum());
     User tmpUser = userMapper.selectOne(queryWrapper);
     if (tmpUser != null) {
       return ServerResponse.createByErrorMsg("该用户已存在");

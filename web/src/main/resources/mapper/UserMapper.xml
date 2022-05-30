@@ -3,20 +3,20 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xupt.dao.UserMapper">
   <resultMap id="user" type="com.xupt.pojo.User">
-    <id column="id" property="id"/>
+    <id column="uid" property="uid"/>
     <result column="username" property="username"/>
     <result column="password" property="password"/>
     <result column="email" property="email"/>
-    <result column="phoneNum" property="phoneNum"/>
+    <result column="phone_num" property="phoneNum"/>
   </resultMap>
   <select id="getUserName" resultType="string">
     select username
     from users
-    where id = #{uid}
+    where uid = #{uid}
   </select>
   <select id="queryPasswordByPhoneNum" resultType="java.lang.String">
     select password
     from users
-    where phoneNum = #{phoneNum}
+    where phone_num = #{phoneNum}
   </select>
 </mapper>
