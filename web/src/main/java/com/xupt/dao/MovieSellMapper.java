@@ -8,7 +8,7 @@ import com.xupt.pojo.MovieSell;
  *  Mapper 接口
  * </p>
  *
- * @author ${author}
+ * 
  * @since 2022-05-30
  */
 public interface MovieSellMapper extends BaseMapper<MovieSell> {

@@ -6,7 +6,7 @@ import com.xupt.pojo.HallSeat;
 /**
  * 服务类
  *
- * @author ${author}
+ * 
  * @since 2022-05-30
  */
 public interface IHallSeatService extends IService<HallSeat> {}

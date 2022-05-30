@@ -6,7 +6,7 @@ import com.xupt.pojo.MovieActor;
 /**
  * 服务类
  *
- * @author ${author}
+ * 
  * @since 2022-05-30
  */
 public interface IMovieActorService extends IService<MovieActor> {}

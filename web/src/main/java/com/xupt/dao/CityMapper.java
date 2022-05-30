@@ -6,7 +6,7 @@ import com.xupt.pojo.City;
 /**
  * Mapper 接口
  *
- * @author ${author}
+ * 
  * @since 2022-05-30
  */
 public interface CityMapper extends BaseMapper<City> {}

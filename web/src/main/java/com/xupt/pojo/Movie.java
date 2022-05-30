@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * @author ${author}
+ * 
  * @since 2022-05-30
  */
 @Data

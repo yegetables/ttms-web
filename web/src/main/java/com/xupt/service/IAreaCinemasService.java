@@ -6,7 +6,7 @@ import com.xupt.pojo.AreaCinemas;
 /**
  * 服务类
  *
- * @author ${author}
+ * 
  * @since 2022-05-30
  */
 public interface IAreaCinemasService extends IService<AreaCinemas> {}

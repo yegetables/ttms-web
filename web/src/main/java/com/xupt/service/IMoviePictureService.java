@@ -6,7 +6,7 @@ import com.xupt.pojo.MoviePicture;
 /**
  * 服务类
  *
- * @author ${author}
+ * 
  * @since 2022-05-30
  */
 public interface IMoviePictureService extends IService<MoviePicture> {}

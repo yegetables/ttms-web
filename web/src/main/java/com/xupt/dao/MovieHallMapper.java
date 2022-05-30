@@ -6,7 +6,7 @@ import com.xupt.pojo.MovieHall;
 /**
  * Mapper 接口
  *
- * @author ${author}
+ * 
  * @since 2022-05-30
  */
 public interface MovieHallMapper extends BaseMapper<MovieHall> {}

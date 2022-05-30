@@ -6,7 +6,7 @@ import com.xupt.pojo.CinemaMovies;
 /**
  * Mapper 接口
  *
- * @author ${author}
+ * 
  * @since 2022-05-30
  */
 public interface CinemaMoviesMapper extends BaseMapper<CinemaMovies> {}

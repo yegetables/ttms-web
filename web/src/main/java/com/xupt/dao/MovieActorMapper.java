@@ -6,7 +6,7 @@ import com.xupt.pojo.MovieActor;
 /**
  * Mapper 接口
  *
- * @author ${author}
+ * 
  * @since 2022-05-30
  */
 public interface MovieActorMapper extends BaseMapper<MovieActor> {}

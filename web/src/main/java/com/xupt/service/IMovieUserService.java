@@ -8,7 +8,7 @@ import com.xupt.pojo.MovieUser;
  * 用户表 服务类
  * </p>
  *
- * @author ${author}
+ * 
  * @since 2022-05-30
  */
 public interface IMovieUserService extends IService<MovieUser> {

@@ -6,7 +6,7 @@ import com.xupt.pojo.Area;
 /**
  * 服务类
  *
- * @author ${author}
+ * 
  * @since 2022-05-30
  */
 public interface IAreaService extends IService<Area> {}
