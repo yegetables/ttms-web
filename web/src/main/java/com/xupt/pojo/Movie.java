@@ -5,10 +5,11 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Date;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /** @since 2022-05-30 */
 @Data
@@ -29,7 +30,7 @@ public class Movie extends Model<Movie> {
   private Integer movieStatus;
 
   /** 上映时间 */
-  private Date movieStart;
+  private String movieStart;
 
   /** 电影的时长 */
   private Integer movieMinute;
