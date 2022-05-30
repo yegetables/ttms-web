@@ -3,7 +3,6 @@ package com.xupt.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xupt.common.ResponseCode;
 import com.xupt.common.ServerResponse;
-import com.xupt.dao.UserMapper;
 import com.xupt.pojo.Users;
 import com.xupt.service.IUsersService;
 import com.xupt.utils.MailTools;
@@ -14,6 +13,7 @@ import com.xupt.utils.TokenUtils;
 import com.xupt.utils.UsersUtils;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -81,11 +80,11 @@ public class LoginController {
     }
     var uid = String.valueOf(user.getUid());
     String token = TokenUtils.getToken(uid);
-    log.info("[Success]token生成成功");
+    //    log.info("[Success]token生成成功");
     redisUtils.set(uid, token, 14 * 24 * 60 * 60);
     response.addHeader("Access-Control-Expose-Headers", "token");
     response.addHeader("token", token);
-    log.info("[Success]登录成功");
+    //    log.info("[Success]登录成功");
     return ServerResponse.createBySuccessMsgData("登录成功", UsersUtils.removeSecret(user));
   }
 
@@ -98,9 +97,9 @@ public class LoginController {
     Map<String, String> map = new HashMap<>();
     map.put("phoneNum", phoneNum);
     var p = checkoutUserExist(map);
-    if (p.getStatus() != ResponseCode.SUCCESS.getCode()) {
-      return ServerResponse.createByErrorMsg("该用户不存在");
-    }
+    //    if (p.getStatus() != ResponseCode.SUCCESS.getCode()) {
+    //      return ServerResponse.createByErrorMsg("该用户不存在");
+    //    }
     // TODO:phone code send
 
     //    String mailAddress = user.getEmail();
@@ -112,15 +111,15 @@ public class LoginController {
   /*
    * * 邮箱验证码发送
    */
-  @PostMapping("/login/codePhoneSend")
+  @PostMapping("/login/codeEmailSend")
   public ServerResponse<String> codeEmailSend(@RequestParam("email") String email) {
     String code = RandomUtils.randomCode();
     Map<String, String> map = new HashMap<>();
     map.put("email", email);
     var p = checkoutUserExist(map);
-    if (p.getStatus() != ResponseCode.SUCCESS.getCode()) {
-      return ServerResponse.createByErrorMsg("该用户不存在");
-    }
+    //    if (p.getStatus() != ResponseCode.SUCCESS.getCode()) {
+    //      return ServerResponse.createByErrorMsg("该用户不存在");
+    //    }
     mailTools.sendSimpleMail(email, code);
     redisUtils.set(email + "code", code, 60);
     return ServerResponse.createBySuccessMsg("发送成功");
@@ -148,8 +147,8 @@ public class LoginController {
         return ServerResponse.createByErrorMsg("邮箱不能为空");
       }
       String getCode = redisUtils.get(email + "code");
-      if (!getCode.equals(code)) {
-        log.info("[Error]登陆失败");
+      if (!Objects.equals(getCode, code)) {
+        //        log.info("[Error]登陆失败");
         return ServerResponse.createByErrorMsg("验证码错误");
       }
     } else if (map.containsKey("phoneNum")) {
@@ -158,8 +157,8 @@ public class LoginController {
         return ServerResponse.createByErrorMsg("手机号不能为空");
       }
       String getCode = redisUtils.get(phoneNum + "code");
-      if (!getCode.equals(code)) {
-        log.info("[Error]登陆失败");
+      if (!Objects.equals(getCode, code)) {
+        //        log.info("[Error]登陆失败");
         return ServerResponse.createByErrorMsg("验证码错误");
       }
     } else {
@@ -169,12 +168,12 @@ public class LoginController {
     Users user = p.getData();
     String uid = String.valueOf(user.getUid());
     String token = TokenUtils.getToken(uid);
-    log.info("[Success]token生成成功");
+    //    log.info("[Success]token生成成功");
     // System.out.println(token);
     redisUtils.set(uid, token, 14 * 24 * 60 * 60);
     response.addHeader("Access-Control-Expose-Headers", "token");
     response.addHeader("token", token);
-    log.info("[Success]登录成功");
+    //    log.info("[Success]登录成功");
     return ServerResponse.createBySuccessMsgData("登录成功", UsersUtils.removeSecret(user));
   }
 
@@ -207,8 +206,8 @@ public class LoginController {
         return ServerResponse.createByErrorMsg("邮箱不能为空");
       }
       String getCode = redisUtils.get(email + "code");
-      if (!getCode.equals(code)) {
-        log.info("[Error]注册失败");
+      if (!Objects.equals(getCode, code)) {
+        //        log.info("[Error]注册失败");
         return ServerResponse.createByErrorMsg("验证码错误");
       }
     } else if (map.containsKey("phoneNum")) {
@@ -217,8 +216,8 @@ public class LoginController {
         return ServerResponse.createByErrorMsg("手机号不能为空");
       }
       String getCode = redisUtils.get(phoneNum + "code");
-      if (!getCode.equals(code)) {
-        log.info("[Error]注册失败");
+      if (!Objects.equals(getCode, code)) {
+        //        log.info("[Error]注册失败");
         return ServerResponse.createByErrorMsg("验证码错误");
       }
     } else {
