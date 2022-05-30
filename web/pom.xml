@@ -106,7 +106,11 @@
       <artifactId>mybatis-plus-extension</artifactId>
       <version>3.3.1.tmp</version>
     </dependency>
-
+    <dependency>
+      <groupId>com.tencentcloudapi</groupId>
+      <artifactId>tencentcloud-sdk-java</artifactId>
+      <version>3.1.449</version><!-- -->
+    </dependency>
   </dependencies>
 
 
