@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xupt.dao.MovieProducerMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.xupt.pojo.MovieProducer">
+        <id column="id" property="id" />
+        <result column="movie_id" property="movieId" />
+        <result column="producer_name" property="producerName" />
+        <result column="producer_picture" property="producerPicture" />
+    </resultMap>
+
+</mapper>

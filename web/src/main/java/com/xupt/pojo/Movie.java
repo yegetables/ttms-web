@@ -1,22 +1,68 @@
 package com.xupt.pojo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
+import java.io.Serializable;
+import java.util.Date;
 import lombok.Data;
-import org.springframework.stereotype.Component;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
-@TableName("movie")
-@Component
+/**
+ * @author ${author}
+ * @since 2022-05-30
+ */
 @Data
-public class Movie {
-  private String movie_name;
-  private String movie_status;
-  private int movie_minute;
-  private String movie_brief; // 电影简介
-  private String movie_score;
-  private String movie_money;
-  private String movie_area;
-  private String movie_type;
-  private String movie_head;
-  private double day_money;
-  private int want_look;
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
+@TableName("movie")
+public class Movie extends Model<Movie> {
+
+  private static final long serialVersionUID = 1L;
+
+  @TableId(value = "id", type = IdType.AUTO)
+  private Integer id;
+
+  /** 电影名字 */
+  private String movieName;
+
+  /** 电影状态(正在热映/即将上映/热播电影) */
+  private Integer movieStatus;
+
+  /** 上映时间 */
+  private Date movieStart;
+
+  /** 电影的时长 */
+  private Integer movieMinute;
+
+  /** 电影的简介 */
+  private String movieBrief;
+
+  /** 电影的总评分 */
+  private Float movieScore;
+
+  /** 电影的票房 */
+  private Double movieMoney;
+
+  /** 电影的出产地 */
+  private String movieArea;
+
+  /** 电影的类型 */
+  private String movieType;
+
+  /** 电影的首页 */
+  private String movieHead;
+
+  /** 当天的票房 */
+  private Double dayMoney;
+
+  /** 想看的数目 */
+  private Long wantLook;
+
+  @Override
+  protected Serializable pkVal() {
+    return this.id;
+  }
 }

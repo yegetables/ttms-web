@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Log4j2
 @Controller
+@ResponseBody
 public class LoginController {
 
   @Autowired private UserMapper userMapper;
@@ -35,19 +36,16 @@ public class LoginController {
    */
 
   @RequestMapping("/login403")
-  @ResponseBody
   public ServerResponse<Boolean> login403() {
     return ServerResponse.createByErrorMsg("没有权限");
   }
 
   @RequestMapping("/getUserName")
-  @ResponseBody
   public String getUserName(Integer id) {
     return userMapper.getUserName(id);
   }
 
   @PostMapping("/login/byPassword")
-  @ResponseBody
   public ServerResponse<User> login(
       @RequestParam("phoneNum") String phoneNum,
       @RequestParam("password") String password,
@@ -76,7 +74,6 @@ public class LoginController {
    * * 验证码发送
    */
   @PostMapping("/login/codeSend")
-  @ResponseBody
   public ServerResponse<String> codeSend(@RequestParam("phoneNum") String phoneNum) {
     String code = RandomUtils.randomCode();
     QueryWrapper queryWrapper = new QueryWrapper();
@@ -96,7 +93,6 @@ public class LoginController {
    * * 验证码登录
    */
   @PostMapping("/login/byCode")
-  @ResponseBody
   public ServerResponse<User> loginByCode(
       @RequestParam("phoneNum") String phoneNum,
       @RequestParam("code") String code,
@@ -124,7 +120,6 @@ public class LoginController {
    * * 注册
    */
   @PostMapping("/register")
-  @ResponseBody
   public ServerResponse<String> register(User user) {
     QueryWrapper queryWrapper = new QueryWrapper();
     queryWrapper.eq("phone_num", user.getPhoneNum());
@@ -138,7 +133,6 @@ public class LoginController {
   }
 
   @RequestMapping(value = "/count", method = RequestMethod.POST)
-  @ResponseBody
   public String count(@RequestBody Map<String, String> map) {
     System.out.println("map:" + map);
     if (map.containsKey("id")) {

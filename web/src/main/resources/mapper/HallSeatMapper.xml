@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xupt.dao.HallSeatMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.xupt.pojo.HallSeat">
+        <id column="id" property="id" />
+        <result column="seat_line" property="seatLine" />
+        <result column="seat_column" property="seatColumn" />
+        <result column="movie_plan_id" property="moviePlanId" />
+        <result column="order_id" property="orderId" />
+        <result column="ticket_status" property="ticketStatus" />
+    </resultMap>
+
+</mapper>
