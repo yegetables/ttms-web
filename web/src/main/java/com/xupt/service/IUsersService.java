@@ -8,4 +8,9 @@ import com.xupt.pojo.Users;
  *
  * @since 2022-05-30
  */
-public interface IUsersService extends IService<Users> {}
+public interface IUsersService extends IService<Users> {
+
+  Users getUserInfo(Integer id);
+
+  void register(Users newUsers);
+}

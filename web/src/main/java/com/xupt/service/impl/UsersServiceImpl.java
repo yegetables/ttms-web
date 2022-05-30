@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xupt.dao.UsersMapper;
 import com.xupt.pojo.Users;
 import com.xupt.service.IUsersService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,4 +13,20 @@ import org.springframework.stereotype.Service;
  * @since 2022-05-30
  */
 @Service
-public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements IUsersService {}
+public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements IUsersService {
+
+  @Autowired private UsersMapper usersMapper;
+
+  @Override
+  public Users getUserInfo(Integer id) {
+    Users user = usersMapper.selectById(id);
+    // 去除敏感信息
+    user.setPassword(null);
+    return user;
+  }
+
+  @Override
+  public void register(Users newUsers) {
+    usersMapper.insert(newUsers);
+  }
+}

@@ -1,5 +1,7 @@
 package com.xupt.common;
 
+import lombok.Getter;
+
 /*
   响应码 code
   0 -- 成功
@@ -7,6 +9,7 @@ package com.xupt.common;
   10 -- token识别失败需要登录
   2 -- 参数不合法
 */
+@Getter
 public enum ResponseCode {
   SUCCESS(0, "SUCCESS"),
   ERROR(1, "ERROR"),

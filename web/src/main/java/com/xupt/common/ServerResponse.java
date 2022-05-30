@@ -1,7 +1,11 @@
 package com.xupt.common;
 
 import java.io.Serializable;
+import lombok.Getter;
+import lombok.ToString;
 
+@Getter
+@ToString
 public class ServerResponse<T> implements Serializable {
   private int status;
   private String msg;
@@ -25,18 +29,6 @@ public class ServerResponse<T> implements Serializable {
   private ServerResponse(int status, String msg) {
     this.status = status;
     this.msg = msg;
-  }
-
-  public int getStatus() {
-    return status;
-  }
-
-  public T getData() {
-    return data;
-  }
-
-  public String getMsg() {
-    return msg;
   }
 
   // 成功返回
