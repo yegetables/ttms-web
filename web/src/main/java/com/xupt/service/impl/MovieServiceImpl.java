@@ -18,7 +18,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements IMovieService {
-  @Autowired MovieMapper movieMapper;
+
+  @Autowired
+  MovieMapper movieMapper;
 
   public List<Movie> queryMovieList(String type, String rule, int page, int pageLimit) {
     if (type == null) {
@@ -35,5 +37,20 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
     moviePage.setDesc(rule);
     IPage<Movie> movieList = movieMapper.selectPage(moviePage, queryWrapper);
     return movieList.getRecords();
+  }
+
+  public List<Movie> queryMoviesByName(String name, String rule, int page, int pageLimit) {
+    QueryWrapper<Movie> queryWrapper = new QueryWrapper<>();
+    queryWrapper.like("movie_name", name);
+
+    Page<Movie> moviePage = new Page<>((page - 1) * pageLimit, pageLimit);
+    moviePage.setDesc(rule);
+    IPage<Movie> movieList = movieMapper.selectPage(moviePage, queryWrapper);
+    return movieList.getRecords();
+  }
+  public void updateMovie(Movie movie){
+    QueryWrapper<Movie> queryWrapper=new QueryWrapper<>();
+    queryWrapper.eq("id",movie.getId());
+    movieMapper.update(movie,queryWrapper);
   }
 }

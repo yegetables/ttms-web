@@ -24,13 +24,13 @@ public class MoviePlan extends Model<MoviePlan> {
   private Integer id;
 
   /** 电影的开始时间 */
-  private Date movieStartTime;
+  private String movieStartTime;
 
   /** 电影的结束时间 */
-  private Date movieEndTime;
+  private String movieEndTime;
 
   /** 演出计划的时间 */
-  private Date planDate;
+  private String planDate;
 
   /** 电影院里面对应的电影id */
   private Integer cinemaMovieId;
@@ -41,6 +41,7 @@ public class MoviePlan extends Model<MoviePlan> {
   /** 某个时间段的钱 */
   private Float ticketMoney;
 
+  private Integer cinemaId;
   @Override
   protected Serializable pkVal() {
     return this.id;

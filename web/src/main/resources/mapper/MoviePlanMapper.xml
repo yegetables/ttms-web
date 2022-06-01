@@ -11,6 +11,10 @@
         <result column="cinema_movie_id" property="cinemaMovieId" />
         <result column="hall_id" property="hallId" />
         <result column="ticket_money" property="ticketMoney" />
+        <result column="cinema_id" property="cinemaId"/>
     </resultMap>
-
+<select id="getMovieListByDate" resultType="com.xupt.pojo.MoviePlan">
+    select * from movie_plan where movie_start_time > #{date1} and
+            date_format(movie_start_time, '%Y-%m-%d %H:%i:%s') like concat(#{date2},'%')
+</select>
 </mapper>

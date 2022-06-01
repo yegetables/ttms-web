@@ -63,4 +63,29 @@ public class MovieController {
     movieMapper.delete(queryWrapper);
     return ServerResponse.createBySuccessMsg("删除成功");
   }
+
+  @PostMapping("/queryMoviesByName")
+  public ServerResponse<List<Movie>> queryMoviesByName(String name,String sortRule,int page,int pageLimit){
+    try{
+      log.info("[查询电影]"+name+"以"+sortRule+"排序"+"page:"+page);
+      List<Movie> movies = movieService.queryMoviesByName(name, sortRule, page, pageLimit);
+      return ServerResponse.createBySuccessMsgData("查询成功",movies);
+    }catch (Exception e){
+      log.error("[Error]"+e);
+      return ServerResponse.createByErrorMsg("服务器异常");
+    }
+
+
+    }
+  @PostMapping("/updateMovie")
+  public ServerResponse<String> updateMovie(Movie movie){
+    try{
+      log.info("[更新电影]"+movie.getMovieName());
+      movieService.updateMovie(movie);
+      return ServerResponse.createBySuccessMsg("更新成功");
+    }catch (Exception e){
+      log.error("[Error]"+e);
+      return ServerResponse.createByErrorMsg("服务器异常");
+    }
+  }
 }
