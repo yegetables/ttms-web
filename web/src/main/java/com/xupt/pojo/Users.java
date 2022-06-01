@@ -9,9 +9,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-/**
- * @since 2022-05-30
- */
+/** @since 2022-05-30 */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)

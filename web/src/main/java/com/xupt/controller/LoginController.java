@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServletResponse;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,26 +32,13 @@ public class LoginController {
   @Autowired private RedisUtils redisUtils;
   @Autowired private MailTools mailTools;
   @Autowired private PHPass phPass;
- @Autowired private CodeUtils codeUtils;
+  @Autowired private CodeUtils codeUtils;
   @Autowired private IUsersService usersService;
 
   /** 处理没有权限 */
   @RequestMapping("/login403")
   public ServerResponse<Boolean> login403() {
     return ServerResponse.createByErrorMsg("没有权限");
-  }
-
-  /**
-   * 去除敏感信息
-   *
-   * @param id uid
-   * @return 用户信息
-   */
-  @GetMapping("/getUserInfo")
-  public ServerResponse<Users> getUserInfo(@RequestParam("id") Integer id) {
-    Users users = usersService.getUserInfo(id);
-    if (users != null) return ServerResponse.createBySuccessMsgData("获取用户名成功", users);
-    return ServerResponse.createByErrorMsg("获取用户名失败");
   }
 
   /**
