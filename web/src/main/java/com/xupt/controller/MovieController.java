@@ -11,10 +11,8 @@ import com.xupt.utils.RedisUtils;
 import java.util.List;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.cache.CacheProperties.Redis;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -67,5 +65,29 @@ public class MovieController  {
     queryWrapper.eq("movie_name",movieName);
     movieMapper.delete(queryWrapper);
     return ServerResponse.createBySuccessMsg("删除成功");
+  }
+  @PostMapping("/queryMoviesByName")
+  public ServerResponse<List<Movie>> queryMoviesByName(String name,String sortRule,int page,int pageLimit){
+    try{
+      log.info("[查询电影]"+name+"以"+sortRule+"排序"+"page:"+page);
+      List<Movie> movies = movieService.queryMoviesByName(name, sortRule, page, pageLimit);
+      return ServerResponse.createBySuccessMsgData("查询成功",movies);
+    }catch (Exception e){
+      log.error("[Error]"+e);
+      return ServerResponse.createByErrorMsg("服务器异常");
+    }
+
+
+    }
+  @PostMapping("/updateMovie")
+  public ServerResponse<String> updateMovie(Movie movie){
+    try{
+      log.info("[更新电影]"+movie.getMovieName());
+      movieService.updateMovie(movie);
+      return ServerResponse.createBySuccessMsg("更新成功");
+    }catch (Exception e){
+      log.error("[Error]"+e);
+      return ServerResponse.createByErrorMsg("服务器异常");
+    }
   }
 }
