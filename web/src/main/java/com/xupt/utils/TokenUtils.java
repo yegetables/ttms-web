@@ -14,7 +14,7 @@ public class TokenUtils {
   private static final Key key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(tokenKey));
 
   private static String Token(String userId, Date date) {
-    System.out.println(bytes.length);
+    //    System.out.println(bytes.length);
     SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
     JwtBuilder builder =
         Jwts.builder()
@@ -29,7 +29,7 @@ public class TokenUtils {
   public static String getToken(String userId) {
     Date date = new Date();
     int nowTime = (int) (date.getTime());
-    System.out.println(nowTime);
+    //    System.out.println(nowTime);
     String TokenStr = Token(userId, date);
     return TokenStr;
   }
