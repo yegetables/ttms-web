@@ -1,6 +1,7 @@
 package com.xupt.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.xupt.common.ServerResponse;
 import com.xupt.pojo.HallSeat;
 
 /**
@@ -8,4 +9,7 @@ import com.xupt.pojo.HallSeat;
  *
  * @since 2022-05-30
  */
-public interface IHallSeatService extends IService<HallSeat> {}
+public interface IHallSeatService extends IService<HallSeat> {
+
+  Integer getSeatsNumber(Integer id);
+}
