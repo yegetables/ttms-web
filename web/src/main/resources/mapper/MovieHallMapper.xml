@@ -1,15 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xupt.dao.MovieHallMapper">
 
-    <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.xupt.pojo.MovieHall">
-        <id column="id" property="id" />
-        <result column="cinema_id" property="cinemaId" />
-        <result column="seat_line" property="seatLine" />
-        <result column="seat_column" property="seatColumn" />
-        <result column="hall_name" property="hallName" />
-        <result column="movie_type" property="movieType" />
-    </resultMap>
+  <resultMap type="com.xupt.pojo.MovieHall" id="MovieHallMap">
+    <result property="id" column="id" jdbcType="INTEGER"/>
+    <result property="cinemaId" column="cinema_id" jdbcType="INTEGER"/>
+    <result property="seatLine" column="seat_line" jdbcType="INTEGER"/>
+    <result property="seatColumn" column="seat_column" jdbcType="INTEGER"/>
+    <result property="hallName" column="hall_name" jdbcType="VARCHAR"/>
+    <result property="movieType" column="movie_type" jdbcType="VARCHAR"/>
+  </resultMap>
+
+  <!-- 批量插入 -->
+  <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+    insert into ttms.movie_hall(cinema_id, seat_line, seat_column, hall_name, movie_type)
+    values
+    <foreach collection="entities" item="entity" separator=",">
+      (#{entity.cinemaId}, #{entity.seatLine}, #{entity.seatColumn}, #{entity.hallName},
+      #{entity.movieType})
+    </foreach>
+  </insert>
+  <!-- 批量插入或按主键更新 -->
+  <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+    insert into ttms.movie_hall(cinema_id, seat_line, seat_column, hall_name, movie_type)
+    values
+    <foreach collection="entities" item="entity" separator=",">
+      (#{entity.cinemaId}, #{entity.seatLine}, #{entity.seatColumn}, #{entity.hallName},
+      #{entity.movieType})
+    </foreach>
+    on duplicate key update
+    cinema_id = values(cinema_id) , seat_line = values(seat_line) , seat_column =
+    values(seat_column) , hall_name = values(hall_name) , movie_type = values(movie_type)
+  </insert>
 
 </mapper>
+
