@@ -66,9 +66,14 @@ public class LoginController {
       return ServerResponse.createByErrorMsg("密码错误");
     }
     var uid = String.valueOf(user.getUid());
-    String token = TokenUtils.getToken(uid);
-    //    log.info("[Success]token生成成功");
-    redisUtils.set(uid, token, 14 * 24 * 60 * 60);
+    String token;
+    String oldToken = redisUtils.get(uid);
+    if (!Objects.isNull(oldToken)) {
+      token = oldToken;
+    } else {
+      token = TokenUtils.getToken(uid);
+      redisUtils.set(uid, token, 14 * 24 * 60 * 60);
+    }
     response.addHeader("Access-Control-Expose-Headers", "token");
     response.addHeader("token", token);
     //    log.info("[Success]登录成功");
