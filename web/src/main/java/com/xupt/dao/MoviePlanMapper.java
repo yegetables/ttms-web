@@ -10,7 +10,6 @@ import org.apache.ibatis.annotations.Mapper;
  *
  * @since 2022-05-30
  */
-@Mapper
 public interface MoviePlanMapper extends BaseMapper<MoviePlan> {
   List<MoviePlan> getMovieListByDate(String date1, String date2);
 }
