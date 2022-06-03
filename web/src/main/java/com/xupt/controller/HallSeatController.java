@@ -6,12 +6,11 @@ import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xupt.pojo.HallSeat;
 import com.xupt.service.HallSeatService;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.Resource;
 import java.io.Serializable;
 import java.util.List;
+import javax.annotation.Resource;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * (HallSeat)表控制层
@@ -57,7 +56,8 @@ public class HallSeatController extends ApiController {
    */
   @PostMapping
   public R insert(@RequestBody HallSeat hallSeat) {
-    return success(this.hallSeatService.save(hallSeat));
+    boolean isSuccess = this.hallSeatService.save(hallSeat);
+    return success(isSuccess ? hallSeat : false);
   }
 
   /**

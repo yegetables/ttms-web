@@ -1,10 +1,9 @@
 package com.xupt.dao;
 
-import java.util.List;
-
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.apache.ibatis.annotations.Param;
 import com.xupt.pojo.HallSeat;
+import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * (HallSeat)表数据库访问层
