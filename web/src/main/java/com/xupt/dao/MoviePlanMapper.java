@@ -3,7 +3,6 @@ package com.xupt.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xupt.pojo.MoviePlan;
 import java.util.List;
-import org.apache.ibatis.annotations.Mapper;
 
 /**
  * Mapper 接口
