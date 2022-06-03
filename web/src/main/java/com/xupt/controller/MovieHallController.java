@@ -9,6 +9,7 @@ import com.xupt.service.MovieHallService;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.Resource;
+import lombok.Data;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,18 +23,21 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/movieHall")
 @ResponseBody
 public class MovieHallController extends ApiController {
+
   /** 服务对象 */
   @Resource private MovieHallService movieHallService;
 
   /**
    * 分页查询所有数据
    *
-   * @param page 分页对象
-   * @param movieHall 查询实体
+   * @param movieHallAndPage(Page) 分页对象
+   * @param movieHallAndPage(movieHall) 查询实体
    * @return 所有数据
    */
   @GetMapping
-  public R selectAll(Page<MovieHall> page, MovieHall movieHall) {
+  public R selectAll(@RequestBody MovieHallAndPage<MovieHall> movieHallAndPage) {
+    Page<MovieHall> page = movieHallAndPage.getPage();
+    MovieHall movieHall = movieHallAndPage.getMovieHall();
     return success(this.movieHallService.page(page, new QueryWrapper<>(movieHall)));
   }
 
@@ -56,7 +60,11 @@ public class MovieHallController extends ApiController {
    */
   @PostMapping
   public R insert(@RequestBody MovieHall movieHall) {
-    return success(this.movieHallService.save(movieHall));
+    boolean isSuccess = this.movieHallService.save(movieHall);
+    if (isSuccess) {
+      return success(movieHall);
+    }
+    return failed("新增失败");
   }
 
   /**
@@ -67,7 +75,11 @@ public class MovieHallController extends ApiController {
    */
   @PutMapping
   public R update(@RequestBody MovieHall movieHall) {
-    return success(this.movieHallService.updateById(movieHall));
+    boolean isSuccess = this.movieHallService.updateById(movieHall);
+    if (isSuccess) {
+      return success(this.movieHallService.getById(movieHall.getId()));
+    }
+    return failed("修改失败");
   }
 
   /**
@@ -78,6 +90,16 @@ public class MovieHallController extends ApiController {
    */
   @DeleteMapping
   public R delete(@RequestParam("idList") List<Long> idList) {
-    return success(this.movieHallService.removeByIds(idList));
+    boolean isSuccess = this.movieHallService.removeByIds(idList);
+    if (isSuccess) {
+      return success("删除成功");
+    }
+    return failed("删除失败");
   }
+}
+
+@Data
+class MovieHallAndPage<T> {
+  private MovieHall movieHall;
+  private Page<T> page;
 }
