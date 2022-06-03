@@ -6,12 +6,11 @@ import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xupt.pojo.MovieHall;
 import com.xupt.service.MovieHallService;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.Resource;
 import java.io.Serializable;
 import java.util.List;
+import javax.annotation.Resource;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * (MovieHall)表控制层

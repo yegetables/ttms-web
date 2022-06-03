@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @since 2022-05-30
  */
-public interface IUsersService extends IService<Users> {
+public interface UsersService extends IService<Users> {
 
   Users getUserInfo(Integer id);
 

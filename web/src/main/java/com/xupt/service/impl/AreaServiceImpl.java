@@ -3,7 +3,7 @@ package com.xupt.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xupt.dao.AreaMapper;
 import com.xupt.pojo.Area;
-import com.xupt.service.IAreaService;
+import com.xupt.service.AreaService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,4 +12,4 @@ import org.springframework.stereotype.Service;
  * @since 2022-05-30
  */
 @Service
-public class AreaServiceImpl extends ServiceImpl<AreaMapper, Area> implements IAreaService {}
+public class AreaServiceImpl extends ServiceImpl<AreaMapper, Area> implements AreaService {}

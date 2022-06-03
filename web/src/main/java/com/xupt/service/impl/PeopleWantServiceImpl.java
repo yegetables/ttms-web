@@ -3,7 +3,7 @@ package com.xupt.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xupt.dao.PeopleWantMapper;
 import com.xupt.pojo.PeopleWant;
-import com.xupt.service.IPeopleWantService;
+import com.xupt.service.PeopleWantService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,4 +13,4 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class PeopleWantServiceImpl extends ServiceImpl<PeopleWantMapper, PeopleWant>
-    implements IPeopleWantService {}
+    implements PeopleWantService {}

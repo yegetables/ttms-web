@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import javax.annotation.Resource;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,7 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Log4j2
 public class AliyunOSSUtils {
   private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-  @Autowired private ConstantProperties constantProperties;
+  @Resource private ConstantProperties constantProperties;
 
   /**
    * 上传

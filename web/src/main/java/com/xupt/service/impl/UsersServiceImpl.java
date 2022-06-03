@@ -3,10 +3,10 @@ package com.xupt.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xupt.dao.UsersMapper;
 import com.xupt.pojo.Users;
-import com.xupt.service.IUsersService;
+import com.xupt.service.UsersService;
 import com.xupt.utils.UsersUtils;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,9 +15,9 @@ import org.springframework.stereotype.Service;
  * @since 2022-05-30
  */
 @Service
-public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements IUsersService {
+public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements UsersService {
 
-  @Autowired private UsersMapper usersMapper;
+  @Resource private UsersMapper usersMapper;
 
   @Override
   public Users getUserInfo(Integer id) {

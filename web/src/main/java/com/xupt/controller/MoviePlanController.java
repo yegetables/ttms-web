@@ -4,8 +4,8 @@ import com.xupt.common.ServerResponse;
 import com.xupt.pojo.MoviePlan;
 import com.xupt.service.impl.MoviePlanServiceImpl;
 import java.util.List;
+import javax.annotation.Resource;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +27,7 @@ public class MoviePlanController {
   // 3.修改演出计划
   // 4.删除演出计划
   // **注意关联座位
-  @Autowired MoviePlanServiceImpl moviePlanService;
+  @Resource MoviePlanServiceImpl moviePlanService;
 
   @PostMapping("/addMoviePlan")
   public ServerResponse<String> addMoviePlan(MoviePlan plan) {

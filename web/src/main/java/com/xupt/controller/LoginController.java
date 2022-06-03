@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xupt.common.ResponseCode;
 import com.xupt.common.ServerResponse;
 import com.xupt.pojo.Users;
-import com.xupt.service.IUsersService;
+import com.xupt.service.UsersService;
 import com.xupt.utils.CodeUtils;
 import com.xupt.utils.MailTools;
 import com.xupt.utils.PHPass;
@@ -15,9 +15,9 @@ import com.xupt.utils.UsersUtils;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,11 +29,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @ResponseBody
 public class LoginController {
-  @Autowired private RedisUtils redisUtils;
-  @Autowired private MailTools mailTools;
-  @Autowired private PHPass phPass;
-  @Autowired private CodeUtils codeUtils;
-  @Autowired private IUsersService usersService;
+  @Resource private RedisUtils redisUtils;
+  @Resource private MailTools mailTools;
+  @Resource private PHPass phPass;
+  @Resource private CodeUtils codeUtils;
+  @Resource private UsersService usersService;
 
   /** 处理没有权限 */
   @RequestMapping("/login403")

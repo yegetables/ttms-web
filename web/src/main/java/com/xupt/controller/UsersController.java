@@ -2,9 +2,9 @@ package com.xupt.controller;
 
 import com.xupt.common.ServerResponse;
 import com.xupt.pojo.Users;
-import com.xupt.service.IUsersService;
+import com.xupt.service.UsersService;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/users")
 @ResponseBody
 public class UsersController {
-  @Autowired private IUsersService usersService;
+  @Resource private UsersService usersService;
 
   /**
    * 获取用户所有信息

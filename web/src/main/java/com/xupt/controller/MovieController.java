@@ -8,8 +8,8 @@ import com.xupt.service.impl.MovieServiceImpl;
 import com.xupt.utils.AliyunOSSUtils;
 import com.xupt.utils.RedisUtils;
 import java.util.List;
+import javax.annotation.Resource;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,10 +20,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class MovieController {
 
   // 1.查询单个电影 2.按照需求排序电影列表并返回 3.添加电影 4.删除电影
-  @Autowired RedisUtils redisUtils;
-  @Autowired MovieMapper movieMapper;
-  @Autowired AliyunOSSUtils aliyunOSSUtils;
-  @Autowired MovieServiceImpl movieService;
+  @Resource RedisUtils redisUtils;
+  @Resource MovieMapper movieMapper;
+  @Resource AliyunOSSUtils aliyunOSSUtils;
+  @Resource MovieServiceImpl movieService;
 
   /*
    * * 查询单个电影

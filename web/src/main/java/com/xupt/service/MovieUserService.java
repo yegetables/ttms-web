@@ -8,4 +8,4 @@ import com.xupt.pojo.MovieUser;
  *
  * @since 2022-05-30
  */
-public interface IMovieUserService extends IService<MovieUser> {}
+public interface MovieUserService extends IService<MovieUser> {}

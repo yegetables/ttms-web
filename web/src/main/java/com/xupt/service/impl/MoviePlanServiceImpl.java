@@ -8,11 +8,11 @@ import com.xupt.dao.MoviePlanMapper;
 import com.xupt.pojo.HallSeat;
 import com.xupt.pojo.MovieHall;
 import com.xupt.pojo.MoviePlan;
-import com.xupt.service.IMoviePlanService;
+import com.xupt.service.MoviePlanService;
 import java.util.Date;
 import java.util.List;
+import javax.annotation.Resource;
 import org.apache.commons.lang3.time.DateFormatUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -22,10 +22,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class MoviePlanServiceImpl extends ServiceImpl<MoviePlanMapper, MoviePlan>
-    implements IMoviePlanService {
-  @Autowired MoviePlanMapper moviePlanMapper;
-  @Autowired MovieHallMapper movieHallMapper;
-  @Autowired HallSeatMapper hallSeatMapper;
+    implements MoviePlanService {
+  @Resource MoviePlanMapper moviePlanMapper;
+  @Resource MovieHallMapper movieHallMapper;
+  @Resource HallSeatMapper hallSeatMapper;
 
   public boolean checkDate(MoviePlan plan) {
     QueryWrapper<MoviePlan> queryWrapper = new QueryWrapper<>();

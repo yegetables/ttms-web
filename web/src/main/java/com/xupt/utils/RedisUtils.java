@@ -2,13 +2,13 @@ package com.xupt.utils;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.Resource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
 public class RedisUtils {
-  @Autowired RedisTemplate<String, Object> redisTemplate;
+  @Resource RedisTemplate<String, Object> redisTemplate;
 
   public String get(String key) {
     return (String) redisTemplate.opsForValue().get(key);

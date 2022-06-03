@@ -3,7 +3,7 @@ package com.xupt.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xupt.dao.AreaCinemasMapper;
 import com.xupt.pojo.AreaCinemas;
-import com.xupt.service.IAreaCinemasService;
+import com.xupt.service.AreaCinemasService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,4 +13,4 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class AreaCinemasServiceImpl extends ServiceImpl<AreaCinemasMapper, AreaCinemas>
-    implements IAreaCinemasService {}
+    implements AreaCinemasService {}

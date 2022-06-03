@@ -3,16 +3,16 @@ package com.xupt.interceptor;
 import com.xupt.utils.RedisUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 @Log4j2
 public class loginInterceptor implements HandlerInterceptor {
-  @Autowired RedisUtils redisUtils;
+  @Resource RedisUtils redisUtils;
 
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)

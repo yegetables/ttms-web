@@ -6,9 +6,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xupt.dao.MovieMapper;
 import com.xupt.pojo.Movie;
-import com.xupt.service.IMovieService;
+import com.xupt.service.MovieService;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,9 +17,9 @@ import org.springframework.stereotype.Service;
  * @since 2022-05-30
  */
 @Service
-public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements IMovieService {
+public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements MovieService {
 
-  @Autowired MovieMapper movieMapper;
+  @Resource MovieMapper movieMapper;
 
   public List<Movie> queryMovieList(String type, String rule, int page, int pageLimit) {
     if (type == null) {

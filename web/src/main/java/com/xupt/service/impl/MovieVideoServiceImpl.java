@@ -3,7 +3,7 @@ package com.xupt.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xupt.dao.MovieVideoMapper;
 import com.xupt.pojo.MovieVideo;
-import com.xupt.service.IMovieVideoService;
+import com.xupt.service.MovieVideoService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,4 +13,4 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class MovieVideoServiceImpl extends ServiceImpl<MovieVideoMapper, MovieVideo>
-    implements IMovieVideoService {}
+    implements MovieVideoService {}

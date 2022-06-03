@@ -3,7 +3,7 @@ package com.xupt.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xupt.dao.MovieActorMapper;
 import com.xupt.pojo.MovieActor;
-import com.xupt.service.IMovieActorService;
+import com.xupt.service.MovieActorService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,4 +13,4 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class MovieActorServiceImpl extends ServiceImpl<MovieActorMapper, MovieActor>
-    implements IMovieActorService {}
+    implements MovieActorService {}
