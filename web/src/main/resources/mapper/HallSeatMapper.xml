@@ -1,15 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xupt.dao.HallSeatMapper">
 
-    <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.xupt.pojo.HallSeat">
-        <id column="id" property="id" />
-        <result column="seat_line" property="seatLine" />
-        <result column="seat_column" property="seatColumn" />
-        <result column="movie_plan_id" property="moviePlanId" />
-        <result column="order_id" property="orderId" />
-        <result column="ticket_status" property="ticketStatus" />
-    </resultMap>
+  <resultMap type="com.xupt.pojo.HallSeat" id="HallSeatMap">
+    <result property="id" column="id" jdbcType="INTEGER"/>
+    <result property="seatLine" column="seat_line" jdbcType="INTEGER"/>
+    <result property="seatColumn" column="seat_column" jdbcType="INTEGER"/>
+    <result property="moviePlanId" column="movie_plan_id" jdbcType="INTEGER"/>
+    <result property="orderId" column="order_id" jdbcType="INTEGER"/>
+    <result property="ticketStatus" column="ticket_status" jdbcType="INTEGER"/>
+  </resultMap>
+
+  <!-- 批量插入 -->
+  <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+    insert into ttms.hall_seat(seat_line, seat_column, movie_plan_id, order_id, ticket_status)
+    values
+    <foreach collection="entities" item="entity" separator=",">
+      (#{entity.seatLine}, #{entity.seatColumn}, #{entity.moviePlanId}, #{entity.orderId},
+      #{entity.ticketStatus})
+    </foreach>
+  </insert>
+  <!-- 批量插入或按主键更新 -->
+  <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+    insert into ttms.hall_seat(seat_line, seat_column, movie_plan_id, order_id, ticket_status)
+    values
+    <foreach collection="entities" item="entity" separator=",">
+      (#{entity.seatLine}, #{entity.seatColumn}, #{entity.moviePlanId}, #{entity.orderId},
+      #{entity.ticketStatus})
+    </foreach>
+    on duplicate key update
+    seat_line = values(seat_line) , seat_column = values(seat_column) , movie_plan_id =
+    values(movie_plan_id) , order_id = values(order_id) , ticket_status = values(ticket_status)
+  </insert>
 
 </mapper>
+
