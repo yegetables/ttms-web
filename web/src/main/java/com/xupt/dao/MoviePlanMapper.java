@@ -12,5 +12,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface MoviePlanMapper extends BaseMapper<MoviePlan> {
-  List<MoviePlan> getMovieListByDate(String date1,String date2);
+  List<MoviePlan> getMovieListByDate(String date1, String date2);
 }

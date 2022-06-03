@@ -1,7 +1,6 @@
 package com.xupt.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.xupt.common.ServerResponse;
 import com.xupt.pojo.HallSeat;
 
 /**

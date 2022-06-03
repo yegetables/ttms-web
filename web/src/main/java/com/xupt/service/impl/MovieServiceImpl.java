@@ -19,8 +19,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements IMovieService {
 
-  @Autowired
-  MovieMapper movieMapper;
+  @Autowired MovieMapper movieMapper;
 
   public List<Movie> queryMovieList(String type, String rule, int page, int pageLimit) {
     if (type == null) {
@@ -48,9 +47,10 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
     IPage<Movie> movieList = movieMapper.selectPage(moviePage, queryWrapper);
     return movieList.getRecords();
   }
-  public void updateMovie(Movie movie){
-    QueryWrapper<Movie> queryWrapper=new QueryWrapper<>();
-    queryWrapper.eq("id",movie.getId());
-    movieMapper.update(movie,queryWrapper);
+
+  public void updateMovie(Movie movie) {
+    QueryWrapper<Movie> queryWrapper = new QueryWrapper<>();
+    queryWrapper.eq("id", movie.getId());
+    movieMapper.update(movie, queryWrapper);
   }
 }

@@ -2,15 +2,9 @@ package com.xupt.utils;
 
 import com.tencentcloudapi.common.Credential;
 import com.tencentcloudapi.common.exception.TencentCloudSDKException;
-
-//导入可选配置类
 import com.tencentcloudapi.common.profile.ClientProfile;
 import com.tencentcloudapi.common.profile.HttpProfile;
-
-// 导入对应SMS模块的client
 import com.tencentcloudapi.sms.v20210111.SmsClient;
-
-// 导入要请求接口对应的request response类
 import com.tencentcloudapi.sms.v20210111.models.SendSmsRequest;
 import com.tencentcloudapi.sms.v20210111.models.SendSmsResponse;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,19 +12,18 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
-/**
- * Tencent Cloud Sms Sendsms
- *
- */
+/** Tencent Cloud Sms Sendsms */
 @Component
 @Configuration
 @EnableAutoConfiguration
 public class CodeUtils {
   @Value("${codeSend.secretId}")
-   String secretId;
+  String secretId;
+
   @Value("${codeSend.secretKey}")
-   String secretKey;
-  public  String SendCode(String Phone) {
+  String secretKey;
+
+  public String SendCode(String Phone) {
     try {
       /* 必要步骤：
        * 实例化一个认证对象，入参需要传入腾讯云账户密钥对secretId，secretKey。
@@ -39,8 +32,8 @@ public class CodeUtils {
        * 以免泄露密钥对危及你的财产安全。
        * CAM密匙查询: https://console.cloud.tencent.com/cam/capi*/
 
-     // System.out.println(secretId);
-     // System.out.println(secretKey);
+      // System.out.println(secretId);
+      // System.out.println(secretKey);
       Credential cred = new Credential(secretId, secretKey);
 
       // 实例化一个http选项，可选，没有特殊需求可以跳过
@@ -110,8 +103,8 @@ public class CodeUtils {
       String[] phoneNumberSet = {Phone};
       req.setPhoneNumberSet(phoneNumberSet);
       /* 模板参数: 若无模板参数，则设置为空 */
-      String VerificationCode=RandomUtils.randomCode();
-      String[] templateParamSet = {VerificationCode,"2"};
+      String VerificationCode = RandomUtils.randomCode();
+      String[] templateParamSet = {VerificationCode, "2"};
       req.setTemplateParamSet(templateParamSet);
 
       /* 通过 client 对象调用 SendSms 方法发起请求。注意请求方法名与请求对象是对应的
