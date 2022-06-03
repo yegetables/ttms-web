@@ -9,6 +9,7 @@ import com.xupt.service.HallSeatService;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.Resource;
+import lombok.Data;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,12 +29,14 @@ public class HallSeatController extends ApiController {
   /**
    * 分页查询所有数据
    *
-   * @param page 分页对象
-   * @param hallSeat 查询实体
+   * @param hallSeatAndPage(page) 分页对象
+   * @param hallSeatAndPage(hallSeat) 查询实体
    * @return 所有数据
    */
   @GetMapping
-  public R selectAll(Page<HallSeat> page, HallSeat hallSeat) {
+  public R selectAll(@RequestBody HallSeatAndPage<HallSeat> hallSeatAndPage) {
+    Page<HallSeat> page = hallSeatAndPage.getPage();
+    HallSeat hallSeat = hallSeatAndPage.getHallSeat();
     return success(this.hallSeatService.page(page, new QueryWrapper<>(hallSeat)));
   }
 
@@ -57,7 +60,10 @@ public class HallSeatController extends ApiController {
   @PostMapping
   public R insert(@RequestBody HallSeat hallSeat) {
     boolean isSuccess = this.hallSeatService.save(hallSeat);
-    return success(isSuccess ? hallSeat : false);
+    if (isSuccess) {
+      return success(hallSeat);
+    }
+    return failed("新增失败");
   }
 
   /**
@@ -68,7 +74,11 @@ public class HallSeatController extends ApiController {
    */
   @PutMapping
   public R update(@RequestBody HallSeat hallSeat) {
-    return success(this.hallSeatService.updateById(hallSeat));
+    boolean isSuccess = this.hallSeatService.updateById(hallSeat);
+    if (isSuccess) {
+      return success(this.hallSeatService.getById(hallSeat.getId()));
+    }
+    return failed("修改失败");
   }
 
   /**
@@ -79,6 +89,16 @@ public class HallSeatController extends ApiController {
    */
   @DeleteMapping
   public R delete(@RequestParam("idList") List<Long> idList) {
-    return success(this.hallSeatService.removeByIds(idList));
+    boolean isSuccess = this.hallSeatService.removeByIds(idList);
+    if (isSuccess) {
+      return success("删除成功");
+    }
+    return failed("删除失败");
   }
+}
+
+@Data
+class HallSeatAndPage<T> {
+  private HallSeat hallSeat;
+  private Page<T> page;
 }
