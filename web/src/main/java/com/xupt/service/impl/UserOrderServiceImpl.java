@@ -3,14 +3,15 @@ package com.xupt.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xupt.dao.UserOrderMapper;
 import com.xupt.pojo.UserOrder;
-import com.xupt.service.IUserOrderService;
+import com.xupt.service.UserOrderService;
 import org.springframework.stereotype.Service;
 
 /**
- * 服务实现类
+ * (UserOrder)表服务实现类
  *
- * @since 2022-05-30
+ * @author ajian
+ * @since 2022-06-03 17:04:50
  */
-@Service
+@Service("userOrderService")
 public class UserOrderServiceImpl extends ServiceImpl<UserOrderMapper, UserOrder>
-    implements IUserOrderService {}
+    implements UserOrderService {}

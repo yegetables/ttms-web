@@ -1,25 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xupt.dao.UserOrderMapper">
 
-    <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.xupt.pojo.UserOrder">
-        <id column="id" property="id" />
-        <result column="user_id" property="userId" />
-        <result column="cinema_name" property="cinemaName" />
-        <result column="movie_name" property="movieName" />
-        <result column="order_money" property="orderMoney" />
-        <result column="cinema_id" property="cinemaId" />
-        <result column="ticket_money" property="ticketMoney" />
-        <result column="movie_start_time" property="movieStartTime" />
-        <result column="order_status" property="orderStatus" />
-        <result column="hall_name" property="hallName" />
-        <result column="movie_type" property="movieType" />
-        <result column="movie_time" property="movieTime" />
-        <result column="movie_id" property="movieId" />
-        <result column="movie_head" property="movieHead" />
-        <result column="plan_id" property="planId" />
-        <result column="pay_time" property="payTime" />
-    </resultMap>
+  <resultMap type="com.xupt.pojo.UserOrder" id="UserOrderMap">
+    <result property="id" column="id" jdbcType="INTEGER"/>
+    <result property="userId" column="user_id" jdbcType="INTEGER"/>
+    <result property="cinemaName" column="cinema_name" jdbcType="VARCHAR"/>
+    <result property="movieName" column="movie_name" jdbcType="VARCHAR"/>
+    <result property="orderMoney" column="order_money" jdbcType="NUMERIC"/>
+    <result property="cinemaId" column="cinema_id" jdbcType="INTEGER"/>
+    <result property="ticketMoney" column="ticket_money" jdbcType="NUMERIC"/>
+    <result property="movieStartTime" column="movie_start_time" jdbcType="TIMESTAMP"/>
+    <result property="orderStatus" column="order_status" jdbcType="VARCHAR"/>
+    <result property="hallName" column="hall_name" jdbcType="VARCHAR"/>
+    <result property="movieType" column="movie_type" jdbcType="VARCHAR"/>
+    <result property="movieTime" column="movie_time" jdbcType="INTEGER"/>
+    <result property="movieId" column="movie_id" jdbcType="INTEGER"/>
+    <result property="movieHead" column="movie_head" jdbcType="VARCHAR"/>
+    <result property="planId" column="plan_id" jdbcType="INTEGER"/>
+    <result property="payTime" column="pay_time" jdbcType="TIMESTAMP"/>
+  </resultMap>
+
+  <!-- 批量插入 -->
+  <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+    insert into ttms.user_order(user_id, cinema_name, movie_name, order_money, cinema_id,
+    ticket_money, movie_start_time, order_status, hall_name, movie_type, movie_time, movie_id,
+    movie_head, plan_id, pay_time)
+    values
+    <foreach collection="entities" item="entity" separator=",">
+      (#{entity.userId}, #{entity.cinemaName}, #{entity.movieName}, #{entity.orderMoney},
+      #{entity.cinemaId}, #{entity.ticketMoney}, #{entity.movieStartTime}, #{entity.orderStatus},
+      #{entity.hallName}, #{entity.movieType}, #{entity.movieTime}, #{entity.movieId},
+      #{entity.movieHead}, #{entity.planId}, #{entity.payTime})
+    </foreach>
+  </insert>
+  <!-- 批量插入或按主键更新 -->
+  <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+    insert into ttms.user_order(user_id, cinema_name, movie_name, order_money, cinema_id,
+    ticket_money, movie_start_time, order_status, hall_name, movie_type, movie_time, movie_id,
+    movie_head, plan_id, pay_time)
+    values
+    <foreach collection="entities" item="entity" separator=",">
+      (#{entity.userId}, #{entity.cinemaName}, #{entity.movieName}, #{entity.orderMoney},
+      #{entity.cinemaId}, #{entity.ticketMoney}, #{entity.movieStartTime}, #{entity.orderStatus},
+      #{entity.hallName}, #{entity.movieType}, #{entity.movieTime}, #{entity.movieId},
+      #{entity.movieHead}, #{entity.planId}, #{entity.payTime})
+    </foreach>
+    on duplicate key update
+    user_id = values(user_id) , cinema_name = values(cinema_name) , movie_name = values(movie_name)
+    , order_money = values(order_money) , cinema_id = values(cinema_id) , ticket_money =
+    values(ticket_money) , movie_start_time = values(movie_start_time) , order_status =
+    values(order_status) , hall_name = values(hall_name) , movie_type = values(movie_type) ,
+    movie_time = values(movie_time) , movie_id = values(movie_id) , movie_head = values(movie_head)
+    , plan_id = values(plan_id) , pay_time = values(pay_time)
+  </insert>
 
 </mapper>
+
