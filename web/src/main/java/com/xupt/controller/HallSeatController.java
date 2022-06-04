@@ -14,7 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * (HallSeat)表控制层
+ * (HallSeat)表控制层 座位
  *
  * @author ajian
  * @since 2022-06-03 14:34:31

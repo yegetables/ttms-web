@@ -14,7 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * (MovieHall)表控制层
+ * (MovieHall)表控制层 演出厅
  *
  * @author ajian
  * @since 2022-06-03 16:47:20

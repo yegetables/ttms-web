@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xupt.pojo.Users;
 import com.xupt.service.UsersService;
+import com.xupt.utils.PHPass;
+import com.xupt.utils.UsersUtils;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.Resource;
@@ -34,6 +36,8 @@ public class UsersController extends ApiController {
   /** 服务对象 */
   @Resource private UsersService usersService;
 
+  @Resource private PHPass phPass;
+
   /**
    * 分页查询所有数据
    *
@@ -45,7 +49,10 @@ public class UsersController extends ApiController {
   public R selectAll(@RequestBody UsersAndPage<Users> usersAndPage) {
     Users users = usersAndPage.getUsers();
     Page<Users> page = usersAndPage.getPage();
-    return success(this.usersService.page(page, new QueryWrapper<>(users)));
+    var pp = usersService.getBaseMapper().selectPage(page, new QueryWrapper<>(users));
+    // 脱敏
+    pp.getRecords().forEach(UsersUtils::removeSecret);
+    return success(pp);
   }
 
   /**
@@ -56,7 +63,9 @@ public class UsersController extends ApiController {
    */
   @GetMapping("{id}")
   public R selectOne(@PathVariable Serializable id) {
-    return success(this.usersService.getById(id));
+    var u = this.usersService.getById(id);
+    UsersUtils.removeSecret(u);
+    return success(u);
   }
 
   /**
@@ -67,8 +76,12 @@ public class UsersController extends ApiController {
    */
   @PostMapping("/new")
   public R insert(@RequestBody Users users) {
+    if (users != null && users.getPassword() != null) {
+      users.setPassword(phPass.HashPassword(users.getPassword()));
+    }
     boolean isSuccess = this.usersService.save(users);
     if (isSuccess) {
+      UsersUtils.removeSecret(users);
       return success(users);
     }
     return failed("新增失败");
@@ -82,10 +95,14 @@ public class UsersController extends ApiController {
    */
   @PutMapping
   public R update(@RequestBody Users users) {
-
+    if (users != null && users.getPassword() != null) {
+      users.setPassword(phPass.HashPassword(users.getPassword()));
+    }
     boolean isSuccess = this.usersService.updateById(users);
     if (isSuccess) {
-      return success(this.usersService.getById(users.getUid()));
+      users = this.usersService.getById(users.getUid());
+      UsersUtils.removeSecret(users);
+      return success(users);
     }
     return failed("修改失败");
   }
