@@ -53,6 +53,7 @@ public class loginInterceptor implements HandlerInterceptor {
       return true;
     } catch (Exception e) {
       System.out.println(e);
+      response.sendRedirect("/login403");
       return false;
     }
   }
