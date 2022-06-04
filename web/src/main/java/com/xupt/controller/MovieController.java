@@ -1,23 +1,35 @@
 package com.xupt.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.xupt.common.ServerResponse;
+import com.baomidou.mybatisplus.extension.api.ApiController;
+import com.baomidou.mybatisplus.extension.api.R;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xupt.dao.MovieMapper;
 import com.xupt.pojo.Movie;
 import com.xupt.service.impl.MovieServiceImpl;
 import com.xupt.utils.AliyunOSSUtils;
 import com.xupt.utils.RedisUtils;
+import java.io.Serializable;
 import java.util.List;
 import javax.annotation.Resource;
+import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
+@RequestMapping("/movie")
 @ResponseBody
 @Log4j2
-public class MovieController {
+public class MovieController extends ApiController {
 
   // 1.查询单个电影 2.按照需求排序电影列表并返回 3.添加电影 4.删除电影
   @Resource RedisUtils redisUtils;
@@ -25,67 +37,79 @@ public class MovieController {
   @Resource AliyunOSSUtils aliyunOSSUtils;
   @Resource MovieServiceImpl movieService;
 
-  /*
-   * * 查询单个电影
+  /**
+   * 分页查询所有数据
+   *
+   * @param movieAndPage(page) 分页对象
+   * @param movieAndPage(movie) 查询实体
+   * @return 所有数据
    */
-  @PostMapping("/queryOneMovie")
-  public ServerResponse<Movie> queryOneMovie(String id) {
-    QueryWrapper queryWrapper = new QueryWrapper();
-    queryWrapper.eq("id", id);
-    log.info("[查询电影]id为：" + id);
-    Movie movie = movieMapper.selectOne(queryWrapper);
-    if (movie != null) {
-      return ServerResponse.createBySuccessMsgData("查询成功", movie);
-    }
-    return ServerResponse.createByErrorMsg("查询失败");
+  @PostMapping
+  public R selectAll(@RequestBody MovieAndPage<Movie> movieAndPage) {
+    Page<Movie> page = movieAndPage.getPage();
+    Movie movie = movieAndPage.getMovie();
+    return success(this.movieService.page(page, new QueryWrapper<>(movie)));
   }
 
-  /*
-   * * 查询电影列表（按照某种规律）
+  /**
+   * 通过主键查询单条数据
+   *
+   * @param id 主键
+   * @return 单条数据
    */
-  @PostMapping("/queryMovieList")
-  public ServerResponse<List<Movie>> queryMovieList(
-      String sortType, String sortRule, int page, int pageLimt) {
-    List<Movie> list = movieService.queryMovieList(sortType, sortRule, page, pageLimt);
-    return ServerResponse.createBySuccessMsgData("查询成功", list);
+  @GetMapping("{id}")
+  public R selectOne(@PathVariable Serializable id) {
+    return success(this.movieService.getById(id));
   }
 
-  @PostMapping("/addMovie")
-  public ServerResponse<String> addMovie(Movie movie) {
-    movieMapper.insert(movie);
-    return ServerResponse.createBySuccessMsg("添加成功");
-  }
-
-  @PostMapping("/deleteMovie")
-  public ServerResponse<String> deleteMovie(String movieName) {
-    QueryWrapper queryWrapper = new QueryWrapper();
-    queryWrapper.eq("movie_name", movieName);
-    movieMapper.delete(queryWrapper);
-    return ServerResponse.createBySuccessMsg("删除成功");
-  }
-
-  @PostMapping("/queryMoviesByName")
-  public ServerResponse<List<Movie>> queryMoviesByName(
-      String name, String sortRule, int page, int pageLimit) {
-    try {
-      log.info("[查询电影]" + name + "以" + sortRule + "排序" + "page:" + page);
-      List<Movie> movies = movieService.queryMoviesByName(name, sortRule, page, pageLimit);
-      return ServerResponse.createBySuccessMsgData("查询成功", movies);
-    } catch (Exception e) {
-      log.error("[Error]" + e);
-      return ServerResponse.createByErrorMsg("服务器异常");
+  /**
+   * 新增数据
+   *
+   * @param movie 实体对象
+   * @return 新增结果
+   */
+  @PostMapping("/new")
+  public R insert(@RequestBody Movie movie) {
+    boolean isSuccess = this.movieService.save(movie);
+    if (isSuccess) {
+      return success(movie);
     }
+    return failed("新增失败");
   }
 
-  @PostMapping("/updateMovie")
-  public ServerResponse<String> updateMovie(Movie movie) {
-    try {
-      log.info("[更新电影]" + movie.getMovieName());
-      movieService.updateMovie(movie);
-      return ServerResponse.createBySuccessMsg("更新成功");
-    } catch (Exception e) {
-      log.error("[Error]" + e);
-      return ServerResponse.createByErrorMsg("服务器异常");
+  /**
+   * 删除数据
+   *
+   * @param idList 主键结合
+   * @return 删除结果
+   */
+  @DeleteMapping
+  public R delete(@RequestParam("idList") List<Long> idList) {
+    boolean isSuccess = this.movieService.removeByIds(idList);
+    if (isSuccess) {
+      return success("删除成功");
     }
+    return failed("删除失败");
   }
+
+  /**
+   * 修改数据
+   *
+   * @param movie 实体对象
+   * @return 修改结果
+   */
+  @PutMapping
+  public R update(@RequestBody Movie movie) {
+    boolean isSuccess = this.movieService.updateById(movie);
+    if (isSuccess) {
+      return success(this.movieService.getById(movie.getId()));
+    }
+    return failed("修改失败");
+  }
+}
+
+@Data
+class MovieAndPage<T> {
+  private Page<T> page;
+  private Movie movie;
 }

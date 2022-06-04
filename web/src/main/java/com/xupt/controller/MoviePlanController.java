@@ -1,14 +1,20 @@
 package com.xupt.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.api.ApiController;
+import com.baomidou.mybatisplus.extension.api.R;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xupt.common.ServerResponse;
 import com.xupt.pojo.MoviePlan;
 import com.xupt.service.impl.MoviePlanServiceImpl;
 import java.util.List;
 import javax.annotation.Resource;
+import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/moviePlan")
 @Log4j2
 @RestController
-public class MoviePlanController {
+public class MoviePlanController extends ApiController {
   // 1.添加演出计划
   // 2.查询演出计划 演出计划按照时间顺序排序
   // 3.修改演出计划
@@ -74,4 +80,17 @@ public class MoviePlanController {
     moviePlanService.delete(id);
     return ServerResponse.createBySuccessMsg("删除成功");
   }
+
+  @PostMapping
+  public R selectAll(@RequestBody MoviePlanAndPage<MoviePlan> moviePlanAndPage) {
+    Page<MoviePlan> page = moviePlanAndPage.getPage();
+    MoviePlan moviePlan = moviePlanAndPage.getMoviePlan();
+    return success(this.moviePlanService.page(page, new QueryWrapper<>(moviePlan)));
+  }
+}
+
+@Data
+class MoviePlanAndPage<T> {
+  private MoviePlan moviePlan;
+  private Page<T> page;
 }

@@ -34,7 +34,7 @@ public class MovieHallController extends ApiController {
    * @param movieHallAndPage(movieHall) 查询实体
    * @return 所有数据
    */
-  @GetMapping
+  @PostMapping
   public R selectAll(@RequestBody MovieHallAndPage<MovieHall> movieHallAndPage) {
     Page<MovieHall> page = movieHallAndPage.getPage();
     MovieHall movieHall = movieHallAndPage.getMovieHall();
@@ -58,7 +58,7 @@ public class MovieHallController extends ApiController {
    * @param movieHall 实体对象
    * @return 新增结果
    */
-  @PostMapping
+  @PostMapping("/new")
   public R insert(@RequestBody MovieHall movieHall) {
     boolean isSuccess = this.movieHallService.save(movieHall);
     if (isSuccess) {

@@ -33,7 +33,7 @@ public class HallSeatController extends ApiController {
    * @param hallSeatAndPage(hallSeat) 查询实体
    * @return 所有数据
    */
-  @GetMapping
+  @PostMapping
   public R selectAll(@RequestBody HallSeatAndPage<HallSeat> hallSeatAndPage) {
     Page<HallSeat> page = hallSeatAndPage.getPage();
     HallSeat hallSeat = hallSeatAndPage.getHallSeat();
@@ -57,7 +57,7 @@ public class HallSeatController extends ApiController {
    * @param hallSeat 实体对象
    * @return 新增结果
    */
-  @PostMapping
+  @PostMapping("/new")
   public R insert(@RequestBody HallSeat hallSeat) {
     boolean isSuccess = this.hallSeatService.save(hallSeat);
     if (isSuccess) {

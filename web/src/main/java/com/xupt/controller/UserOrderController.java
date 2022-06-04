@@ -41,7 +41,7 @@ public class UserOrderController extends ApiController {
    * @param userOrderAndPage(userOrder) 查询实体
    * @return 所有数据
    */
-  @GetMapping
+  @PostMapping
   public R selectAll(@RequestBody UserOrderAndPage<UserOrder> userOrderAndPage) {
     UserOrder userOrder = userOrderAndPage.getUserOrder();
     Page<UserOrder> page = userOrderAndPage.getPage();
@@ -65,7 +65,7 @@ public class UserOrderController extends ApiController {
    * @param userOrder 实体对象
    * @return 新增结果
    */
-  @PostMapping
+  @PostMapping("/new")
   public R insert(@RequestBody UserOrder userOrder) {
     boolean isSuccess = this.userOrderService.save(userOrder);
     if (isSuccess) {
