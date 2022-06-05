@@ -76,7 +76,8 @@ public class HallSeatController extends ApiController {
   public R update(@RequestBody HallSeat hallSeat) {
     boolean isSuccess = this.hallSeatService.updateById(hallSeat);
     if (isSuccess) {
-      return success(this.hallSeatService.getById(hallSeat.getId()));
+      hallSeat = this.hallSeatService.getById(hallSeat.getId());
+      return success(hallSeat);
     }
     return failed("修改失败");
   }

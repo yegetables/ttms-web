@@ -102,7 +102,8 @@ public class MovieController extends ApiController {
   public R update(@RequestBody Movie movie) {
     boolean isSuccess = this.movieService.updateById(movie);
     if (isSuccess) {
-      return success(this.movieService.getById(movie.getId()));
+      movie = this.movieService.getById(movie.getId());
+      return success(movie);
     }
     return failed("修改失败");
   }

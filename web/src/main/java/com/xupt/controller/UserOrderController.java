@@ -90,6 +90,7 @@ public class UserOrderController extends ApiController {
 
       boolean isSuccess = this.userOrderService.updateById(userOrder);
       if (isSuccess) {
+        userOrder = this.userOrderService.getById(userOrder.getId());
         return success(userOrder);
       }
     } catch (Exception e) {

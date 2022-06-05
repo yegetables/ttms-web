@@ -77,7 +77,8 @@ public class MovieHallController extends ApiController {
   public R update(@RequestBody MovieHall movieHall) {
     boolean isSuccess = this.movieHallService.updateById(movieHall);
     if (isSuccess) {
-      return success(this.movieHallService.getById(movieHall.getId()));
+      movieHall = this.movieHallService.getById(movieHall.getId());
+      return success(movieHall);
     }
     return failed("修改失败");
   }
