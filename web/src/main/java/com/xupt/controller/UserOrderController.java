@@ -67,9 +67,13 @@ public class UserOrderController extends ApiController {
    */
   @PostMapping("/new")
   public R insert(@RequestBody UserOrder userOrder) {
-    boolean isSuccess = this.userOrderService.save(userOrder);
-    if (isSuccess) {
-      return success(userOrder);
+    try {
+      boolean isSuccess = this.userOrderService.save(userOrder);
+      if (isSuccess) {
+        return success(userOrder);
+      }
+    } catch (Exception e) {
+      return failed("新增失败" + e.getMessage());
     }
     return failed("新增失败");
   }
@@ -82,9 +86,14 @@ public class UserOrderController extends ApiController {
    */
   @PutMapping
   public R update(@RequestBody UserOrder userOrder) {
-    boolean isSuccess = this.userOrderService.updateById(userOrder);
-    if (isSuccess) {
-      return success(userOrder);
+    try {
+
+      boolean isSuccess = this.userOrderService.updateById(userOrder);
+      if (isSuccess) {
+        return success(userOrder);
+      }
+    } catch (Exception e) {
+      return failed("修改失败" + e.getMessage());
     }
     return failed("修改失败");
   }

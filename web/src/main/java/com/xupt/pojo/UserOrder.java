@@ -4,8 +4,9 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Date;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -36,7 +37,9 @@ public class UserOrder extends Model<UserOrder> {
   private Integer cinemaId;
   // 一张票的钱
   private Float ticketMoney;
+
   // 电影的开始时间
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private Date movieStartTime;
   // 订单状态/未支付or已支付/退款
   private String orderStatus;
@@ -51,6 +54,8 @@ public class UserOrder extends Model<UserOrder> {
   private String movieHead;
   // 计划Id
   private Integer planId;
+
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private Date payTime;
 
   /**
