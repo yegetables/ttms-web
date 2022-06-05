@@ -26,4 +26,5 @@ hs_err_pid*
 .vsocde
 
 /**/application.properties
-/web/deploy.sh
+/web/*.sh
+/log

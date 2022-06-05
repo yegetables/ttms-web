@@ -23,7 +23,7 @@ public class CodeUtils {
   @Value("${codeSend.secretKey}")
   String secretKey;
 
-  public String SendCode(String Phone) {
+  public String SendCode(String Phone, String code) {
     try {
       /* 必要步骤：
        * 实例化一个认证对象，入参需要传入腾讯云账户密钥对secretId，secretKey。
@@ -103,7 +103,7 @@ public class CodeUtils {
       String[] phoneNumberSet = {Phone};
       req.setPhoneNumberSet(phoneNumberSet);
       /* 模板参数: 若无模板参数，则设置为空 */
-      String VerificationCode = RandomUtils.randomCode();
+      String VerificationCode = code;
       String[] templateParamSet = {VerificationCode, "2"};
       req.setTemplateParamSet(templateParamSet);
 
@@ -121,5 +121,9 @@ public class CodeUtils {
       e.printStackTrace();
     }
     return "发送异常";
+  }
+
+  public String SendCode(String Phone) {
+    return SendCode(Phone, RandomUtils.randomCode());
   }
 }

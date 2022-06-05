@@ -3,9 +3,11 @@ package com.xupt.common;
 import java.io.Serializable;
 import lombok.Getter;
 import lombok.ToString;
+import lombok.extern.log4j.Log4j2;
 
 @Getter
 @ToString
+@Log4j2
 public class ServerResponse<T> implements Serializable {
   private int status;
   private String msg;

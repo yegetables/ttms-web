@@ -13,7 +13,7 @@ public class TokenUtils {
   private static final byte[] bytes = tokenKey.getBytes();
   private static final Key key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(tokenKey));
 
-  private static String Token(String userId, Date date) {
+  private static String Token(Integer userId, Date date) {
     //    System.out.println(bytes.length);
     SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
     JwtBuilder builder =
@@ -26,15 +26,11 @@ public class TokenUtils {
     return jwt;
   }
 
-  public static String getToken(String userId) {
+  public static String getToken(Integer userId) {
     Date date = new Date();
     int nowTime = (int) (date.getTime());
     //    System.out.println(nowTime);
     String TokenStr = Token(userId, date);
     return TokenStr;
-  }
-
-  public static String getToken(Integer userId) {
-    return getToken(String.valueOf(userId));
   }
 }
