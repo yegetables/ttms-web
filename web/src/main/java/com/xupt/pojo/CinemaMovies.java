@@ -5,16 +5,21 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serializable;
+import java.util.Date;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /** @since 2022-05-30 */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("cinema_movies")
+@AllArgsConstructor
 public class CinemaMovies extends Model<CinemaMovies> {
 
   private static final long serialVersionUID = 1L;
@@ -34,10 +39,13 @@ public class CinemaMovies extends Model<CinemaMovies> {
   private Float movieLowmoney;
 
   /** 电影院这部电影当天赚得钱 */
-  private Float dayMoney;
+  private Double dayMoney;
 
   /** 电影院这部电影上映时间总钱数 */
-  private Float cinemaMovieMoney;
+  private Double cinemaMovieMoney;
+  /** 当天的日期 */
+  @JsonFormat(pattern = "yyyy-MM-dd")
+  private String day;
 
   @Override
   protected Serializable pkVal() {
