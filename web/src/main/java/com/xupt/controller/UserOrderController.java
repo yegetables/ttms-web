@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xupt.pojo.UserOrder;
 import com.xupt.service.UserOrderService;
+import com.xupt.service.impl.CinemaMoviesServiceImpl;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.Resource;
@@ -34,6 +35,7 @@ public class UserOrderController extends ApiController {
   /** 服务对象 */
   @Resource private UserOrderService userOrderService;
 
+  @Resource private CinemaMoviesServiceImpl cinemaMoviesService;
   /**
    * 分页查询所有数据
    *
@@ -107,6 +109,7 @@ public class UserOrderController extends ApiController {
    */
   @DeleteMapping
   public R delete(@RequestParam("idList") List<Long> idList) {
+    cinemaMoviesService.deleteTicket(idList);
     return success(this.userOrderService.removeByIds(idList));
   }
 }

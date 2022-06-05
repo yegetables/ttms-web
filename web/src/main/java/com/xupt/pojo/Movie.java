@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import java.io.Serializable;
+import java.util.ArrayList;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -37,7 +38,7 @@ public class Movie extends Model<Movie> {
   private String movieBrief;
 
   /** 电影的总评分 */
-  private Float movieScore;
+  private Double movieScore;
 
   /** 电影的票房 */
   private Double movieMoney;
@@ -60,5 +61,14 @@ public class Movie extends Model<Movie> {
   @Override
   protected Serializable pkVal() {
     return this.id;
+  }
+
+  private String typesArrToString(ArrayList<String> types) {
+    StringBuffer rs = new StringBuffer();
+    for (String s : types) {
+      rs.append(s);
+      rs.append("/");
+    }
+    return rs.toString();
   }
 }

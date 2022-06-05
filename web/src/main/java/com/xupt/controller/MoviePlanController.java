@@ -4,18 +4,20 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.api.ApiController;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.xupt.common.ServerResponse;
 import com.xupt.pojo.MoviePlan;
-import com.xupt.service.impl.MoviePlanServiceImpl;
+import com.xupt.service.HallSeatService;
+import com.xupt.service.MoviePlanService;
 import java.util.List;
 import javax.annotation.Resource;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -33,52 +35,30 @@ public class MoviePlanController extends ApiController {
   // 3.修改演出计划
   // 4.删除演出计划
   // **注意关联座位
-  @Resource MoviePlanServiceImpl moviePlanService;
+  @Resource MoviePlanService moviePlanService;
 
-  @PostMapping("/addMoviePlan")
-  public ServerResponse<String> addMoviePlan(MoviePlan plan) {
+  @Resource HallSeatService hallSeatService;
+
+  @PostMapping("/new")
+  public R addMoviePlan(@RequestBody MoviePlan plan) {
     if (!moviePlanService.checkDate(plan)) {
       log.error("[演出计划添加]日期冲突");
-      return ServerResponse.createByErrorMsg("日期与其它演出计划冲突");
+      return failed("日期与其它演出计划冲突");
     }
     log.info("[演出计划添加]开始添加");
     moviePlanService.insert(plan);
     moviePlanService.initSeat(plan);
-    return ServerResponse.createBySuccessMsg("添加成功");
-  }
-  // 按照电影id查询演出计划
-  @GetMapping("/getMoviePlansListByMovieId")
-  public ServerResponse<List<MoviePlan>> getMoviePlansListByMovieId(Integer id) {
-    List<MoviePlan> movieListByMovieId = moviePlanService.getMovieListByMovieId(id);
-    return ServerResponse.createBySuccessMsgData("查询成功", movieListByMovieId);
-  }
-  // 根据电影院查询演出计划
-  @GetMapping("/getMoviePlansListByCinema")
-  public ServerResponse<List<MoviePlan>> getMoviePlanListByCinema(Integer id) {
-    List<MoviePlan> moviePlans = moviePlanService.getMovieListByCinemaId(id);
-    return ServerResponse.createBySuccessMsgData("查询成功", moviePlans);
-  }
-  // 根据日期查询演出计划
-  @GetMapping("/getMoviePlansByDate")
-  public ServerResponse<List<MoviePlan>> getMoviePlanByDate(String date) {
-    List<MoviePlan> movieListByDate = moviePlanService.getMovieListByDate(date);
-    return ServerResponse.createBySuccessMsgData("查询成功", movieListByDate);
+    return success(plan);
   }
   // 更改演出计划
-  @PostMapping("/updateMoviePlan")
-  public ServerResponse<String> updateMoviePlan(MoviePlan plan) {
+  @PutMapping
+  public R updateMoviePlan(@RequestBody MoviePlan plan) {
     if (!moviePlanService.checkDate(plan)) {
-      return ServerResponse.createByErrorMsg("日期冲突");
+      return failed("日期冲突");
     }
     moviePlanService.update(plan);
-    return ServerResponse.createBySuccessMsg("修改成功");
-  }
-  // 删除演出计划
-  @PostMapping("/deleteMoviePlan")
-  public ServerResponse<String> deleteMoviePlan(Integer id) {
-    moviePlanService.deleteSeat(id);
-    moviePlanService.delete(id);
-    return ServerResponse.createBySuccessMsg("删除成功");
+    plan = moviePlanService.getById(plan.getId());
+    return success(plan);
   }
 
   @PostMapping
@@ -86,6 +66,25 @@ public class MoviePlanController extends ApiController {
     Page<MoviePlan> page = moviePlanAndPage.getPage();
     MoviePlan moviePlan = moviePlanAndPage.getMoviePlan();
     return success(this.moviePlanService.page(page, new QueryWrapper<>(moviePlan)));
+  }
+
+  /**
+   * 删除数据
+   *
+   * @param idList 主键结合
+   * @return 删除结果
+   */
+  @DeleteMapping
+  public R delete(@RequestParam("idList") List<Long> idList) {
+    boolean isSuccess = this.moviePlanService.removeByIds(idList);
+    if (isSuccess) {
+      isSuccess = hallSeatService.removeByIds(idList);
+      if (isSuccess) {
+        return success("删除成功");
+      }
+      return failed("演出计划删除成功，座位删除失败");
+    }
+    return failed("删除失败");
   }
 }
 
