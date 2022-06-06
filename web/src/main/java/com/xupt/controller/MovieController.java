@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xupt.dao.MovieMapper;
 import com.xupt.pojo.Movie;
+import com.xupt.pojo.SortRuleType;
 import com.xupt.service.impl.MovieServiceImpl;
 import com.xupt.utils.AliyunOSSUtils;
 import com.xupt.utils.RedisUtils;
@@ -50,7 +51,17 @@ public class MovieController extends ApiController {
     Movie movie = movieAndPage.getMovie();
     return success(this.movieService.page(page, new QueryWrapper<>(movie)));
   }
-
+  @PostMapping("/sort")
+  public R selectAllAndSort(@RequestBody MovieAndPageAndSort<Movie> movieMovieAndPageAndSort){
+        try{
+          Page<Movie> page=movieMovieAndPageAndSort.getPage();
+          SortRuleType sortRuleType=movieMovieAndPageAndSort.getSortRuleType();
+          return success(this.movieService.queryMovieListAndSort(page,sortRuleType));
+        }catch (Exception e){
+          log.error(e);
+          return failed("服务器异常");
+        }
+  }
   /**
    * 通过主键查询单条数据
    *
@@ -113,4 +124,10 @@ public class MovieController extends ApiController {
 class MovieAndPage<T> {
   private Page<T> page;
   private Movie movie;
+}
+@Data
+class MovieAndPageAndSort<T>{
+  private  Page<T> page;
+  private  Movie movie;
+  private SortRuleType sortRuleType;
 }
