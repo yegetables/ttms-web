@@ -41,27 +41,27 @@ public class MovieController extends ApiController {
   /**
    * 分页查询所有数据
    *
-   * @param movieAndPage(page) 分页对象
-   * @param movieAndPage(movie) 查询实体
+   * @param movieAndPageAndSort 分页对象
+   * @param movieAndPageAndSort(movie) 查询实体
    * @return 所有数据
    */
   @PostMapping
-  public R selectAll(@RequestBody MovieAndPage<Movie> movieAndPage) {
-    Page<Movie> page = movieAndPage.getPage();
-    Movie movie = movieAndPage.getMovie();
-    return success(this.movieService.page(page, new QueryWrapper<>(movie)));
+  public R selectAll(@RequestBody MovieAndPageAndSort<Movie> movieAndPageAndSort) {
+    try {
+      if (movieAndPageAndSort.getSortRuleType() == null) {
+        Page<Movie> page = movieAndPageAndSort.getPage();
+        Movie movie = movieAndPageAndSort.getMovie();
+        return success(this.movieService.page(page, new QueryWrapper<>(movie)));
+      }
+      Page<Movie> page = movieAndPageAndSort.getPage();
+      SortRuleType sortRuleType = movieAndPageAndSort.getSortRuleType();
+      return success(this.movieService.queryMovieListAndSort(page, sortRuleType));
+    }catch (Exception e){
+      log.error(e);
+      return failed("服务器异常");
+    }
   }
-  @PostMapping("/sort")
-  public R selectAllAndSort(@RequestBody MovieAndPageAndSort<Movie> movieMovieAndPageAndSort){
-        try{
-          Page<Movie> page=movieMovieAndPageAndSort.getPage();
-          SortRuleType sortRuleType=movieMovieAndPageAndSort.getSortRuleType();
-          return success(this.movieService.queryMovieListAndSort(page,sortRuleType));
-        }catch (Exception e){
-          log.error(e);
-          return failed("服务器异常");
-        }
-  }
+
   /**
    * 通过主键查询单条数据
    *
