@@ -1,6 +1,7 @@
 package com.xupt.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.xupt.pojo.HallSeat;
 import com.xupt.pojo.UserOrder;
 
 /**
@@ -9,4 +10,7 @@ import com.xupt.pojo.UserOrder;
  * @author ajian
  * @since 2022-06-03 17:04:50
  */
-public interface UserOrderService extends IService<UserOrder> {}
+public interface UserOrderService extends IService<UserOrder> {
+  boolean buyTicket(UserOrder userOrder, HallSeat hallSeat);
+  boolean returnTicket(UserOrder userOrder);
+}

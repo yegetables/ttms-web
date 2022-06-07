@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.api.ApiController;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.sun.net.httpserver.Authenticator.Success;
+import com.xupt.pojo.HallSeat;
 import com.xupt.pojo.UserOrder;
 import com.xupt.service.UserOrderService;
 import com.xupt.service.impl.CinemaMoviesServiceImpl;
@@ -111,6 +113,32 @@ public class UserOrderController extends ApiController {
   public R delete(@RequestParam("idList") List<Long> idList) {
     cinemaMoviesService.deleteTicket(idList);
     return success(this.userOrderService.removeByIds(idList));
+  }
+  /**
+   *
+   *购票
+   *
+   */
+  @PostMapping("/new/buyTicket")
+  public R buyTicket(@RequestBody UserOrder userOrder,@RequestBody HallSeat hallSeat){
+    try {
+      if (userOrderService.buyTicket(userOrder, hallSeat))
+        return success(null);
+
+    }catch (Exception e){
+      logger.error(e.toString());
+      return failed("服务器异常");
+    }
+    return failed("服务器异常");
+  }
+  @DeleteMapping("/returnTicket")
+  public R returnTicket(@RequestBody UserOrder userOrder){
+    try{if(userOrderService.returnTicket(userOrder)){
+      return success(null);
+    }}catch (Exception e){
+      return failed("服务器异常");
+    }
+    return failed("服务器异常");
   }
 }
 
