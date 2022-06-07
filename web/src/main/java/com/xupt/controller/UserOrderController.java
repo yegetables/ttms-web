@@ -120,8 +120,10 @@ public class UserOrderController extends ApiController {
    *
    */
   @PostMapping("/new/buyTicket")
-  public R buyTicket(@RequestBody UserOrder userOrder,@RequestBody HallSeat hallSeat){
+  public R buyTicket(@RequestBody UserOrderAndSeat userOrderAndSeat){
     try {
+      UserOrder userOrder=userOrderAndSeat.getUserOrder();
+      HallSeat hallSeat=userOrderAndSeat.getHallSeat();
       if (userOrderService.buyTicket(userOrder, hallSeat))
         return success(null);
 
@@ -146,4 +148,9 @@ public class UserOrderController extends ApiController {
 class UserOrderAndPage<T> {
   private UserOrder userOrder;
   private Page<T> page;
+}
+@Data
+class UserOrderAndSeat{
+  private UserOrder userOrder;
+  private HallSeat hallSeat;
 }
