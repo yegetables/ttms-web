@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.api.ApiController;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.sun.net.httpserver.Authenticator.Success;
 import com.xupt.pojo.HallSeat;
 import com.xupt.pojo.UserOrder;
 import com.xupt.service.UserOrderService;
@@ -114,30 +113,28 @@ public class UserOrderController extends ApiController {
     cinemaMoviesService.deleteTicket(idList);
     return success(this.userOrderService.removeByIds(idList));
   }
-  /**
-   *
-   *购票
-   *
-   */
+  /** 购票 */
   @PostMapping("/new/buyTicket")
-  public R buyTicket(@RequestBody UserOrderAndSeat userOrderAndSeat){
+  public R buyTicket(@RequestBody UserOrderAndSeat userOrderAndSeat) {
     try {
-      UserOrder userOrder=userOrderAndSeat.getUserOrder();
-      HallSeat hallSeat=userOrderAndSeat.getHallSeat();
-      if (userOrderService.buyTicket(userOrder, hallSeat))
-        return success(null);
+      UserOrder userOrder = userOrderAndSeat.getUserOrder();
+      HallSeat hallSeat = userOrderAndSeat.getHallSeat();
+      if (userOrderService.buyTicket(userOrder, hallSeat)) return success(null);
 
-    }catch (Exception e){
+    } catch (Exception e) {
       logger.error(e.toString());
       return failed("服务器异常");
     }
     return failed("服务器异常");
   }
+
   @DeleteMapping("/returnTicket")
-  public R returnTicket(@RequestBody UserOrder userOrder){
-    try{if(userOrderService.returnTicket(userOrder)){
-      return success(null);
-    }}catch (Exception e){
+  public R returnTicket(@RequestBody UserOrder userOrder) {
+    try {
+      if (userOrderService.returnTicket(userOrder)) {
+        return success(null);
+      }
+    } catch (Exception e) {
       return failed("服务器异常");
     }
     return failed("服务器异常");
@@ -149,8 +146,9 @@ class UserOrderAndPage<T> {
   private UserOrder userOrder;
   private Page<T> page;
 }
+
 @Data
-class UserOrderAndSeat{
+class UserOrderAndSeat {
   private UserOrder userOrder;
   private HallSeat hallSeat;
 }

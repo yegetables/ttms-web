@@ -73,7 +73,7 @@ public class LoginController {
     }
     var uid = user.getUid();
     String token;
-    String oldToken = redisUtils.get(String.valueOf(uid));
+    String oldToken = (String) redisUtils.get(String.valueOf(uid));
     if (!StringUtils.isBlank(oldToken)) {
       token = oldToken;
     } else {
@@ -156,14 +156,14 @@ public class LoginController {
         log.warn("[login/byCode]" + "输入邮箱为空");
         return ServerResponse.createByErrorMsg("邮箱不能为空");
       }
-      reallyCode = redisUtils.get(email + "code");
+      reallyCode = (String) redisUtils.get(email + "code");
     } else if (map.containsKey("phoneNum")) {
       String phoneNum = map.get("phoneNum");
       if (StringUtils.isBlank(phoneNum)) {
         log.warn("[login/byCode]" + "输入手机号为空");
         return ServerResponse.createByErrorMsg("手机号不能为空");
       }
-      reallyCode = redisUtils.get(phoneNum + "code");
+      reallyCode = (String) redisUtils.get(phoneNum + "code");
     } else {
       log.warn("[login/byCode]" + "需要email或者phoneNum,,登陆失败");
       return ServerResponse.createByErrorMsg("需要email或者phoneNum,登陆失败");
@@ -222,13 +222,13 @@ public class LoginController {
       if (StringUtils.isBlank(phoneNum)) {
         return ServerResponse.createByErrorMsg("手机号不能为空");
       }
-      reallyCode = redisUtils.get(phoneNum + "code");
+      reallyCode = (String) redisUtils.get(phoneNum + "code");
     } else if (map.containsKey("email")) {
       String email = map.get("email");
       if (email == null) {
         return ServerResponse.createByErrorMsg("邮箱不能为空");
       }
-      reallyCode = redisUtils.get(email + "code");
+      reallyCode = (String) redisUtils.get(email + "code");
     } else {
       log.warn("[register]" + "需要email或者phoneNum,注册失败");
       return ServerResponse.createByErrorMsg("注册失败");

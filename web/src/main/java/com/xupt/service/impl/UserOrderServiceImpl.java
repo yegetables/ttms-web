@@ -42,39 +42,40 @@ public class UserOrderServiceImpl extends ServiceImpl<UserOrderMapper, UserOrder
       hallSeat1.setTicketStatus(1);
       hallSeat1.setOrderId(userOrder1.getId());
       hallSeatMapper.update(hallSeat1, queryWrapper);
-      QueryWrapper<Movie> movieQueryWrapper=new QueryWrapper<>();
-      movieQueryWrapper.eq("id",userOrder.getMovieId());
+      QueryWrapper<Movie> movieQueryWrapper = new QueryWrapper<>();
+      movieQueryWrapper.eq("id", userOrder.getMovieId());
       Movie movie = movieMapper.selectOne(movieQueryWrapper);
-      movie.setMovieMoney(bigDecimalUtils.addDouble(movie.getMovieMoney(),userOrder.getOrderMoney()));
-      movieMapper.update(movie,movieQueryWrapper);
+      movie.setMovieMoney(
+          bigDecimalUtils.addDouble(movie.getMovieMoney(), userOrder.getOrderMoney()));
+      movieMapper.update(movie, movieQueryWrapper);
       return true;
-    }catch (Exception e){
+    } catch (Exception e) {
       return false;
     }
   }
 
   @Override
   public boolean returnTicket(UserOrder userOrder) {
-    try{
-      int id=userOrder.getId();
-      QueryWrapper<HallSeat> queryWrapper=new QueryWrapper<>();
-      queryWrapper.eq("order_id",id);
-      HallSeat hallSeat=hallSeatMapper.selectOne(queryWrapper);
+    try {
+      int id = userOrder.getId();
+      QueryWrapper<HallSeat> queryWrapper = new QueryWrapper<>();
+      queryWrapper.eq("order_id", id);
+      HallSeat hallSeat = hallSeatMapper.selectOne(queryWrapper);
       hallSeat.setOrderId(-1);
       hallSeat.setTicketStatus(-1);
-      hallSeatMapper.update(hallSeat,queryWrapper);
-      QueryWrapper<UserOrder> orderQueryWrapper=new QueryWrapper<>();
-      orderQueryWrapper.eq("id",userOrder.getId());
+      hallSeatMapper.update(hallSeat, queryWrapper);
+      QueryWrapper<UserOrder> orderQueryWrapper = new QueryWrapper<>();
+      orderQueryWrapper.eq("id", userOrder.getId());
       userOrderMapper.delete(orderQueryWrapper);
-      QueryWrapper<Movie> movieQueryWrapper=new QueryWrapper<>();
-      movieQueryWrapper.eq("id",userOrder.getMovieId());
+      QueryWrapper<Movie> movieQueryWrapper = new QueryWrapper<>();
+      movieQueryWrapper.eq("id", userOrder.getMovieId());
       Movie movie = movieMapper.selectOne(movieQueryWrapper);
-      movie.setMovieMoney(bigDecimalUtils.subDouble(movie.getMovieMoney(),userOrder.getOrderMoney()));
-      movieMapper.update(movie,movieQueryWrapper);
+      movie.setMovieMoney(
+          bigDecimalUtils.subDouble(movie.getMovieMoney(), userOrder.getOrderMoney()));
+      movieMapper.update(movie, movieQueryWrapper);
       return true;
-    }catch (Exception e){
+    } catch (Exception e) {
       return false;
     }
   }
-
 }

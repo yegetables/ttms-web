@@ -36,7 +36,7 @@ public class loginInterceptor implements HandlerInterceptor {
               .getBody();
       String tokenUserId = (String) claims.get("userId");
       log.info("解析到uid:" + tokenUserId);
-      String RedisToken = redisUtils.get(tokenUserId);
+      String RedisToken = (String) redisUtils.get(tokenUserId);
       if (RedisToken == null) {
         log.info("[tokenError]该用户没有token值");
         //   request.setAttribute("uid",tokenUserId);
