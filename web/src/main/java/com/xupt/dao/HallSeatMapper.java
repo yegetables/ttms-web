@@ -1,8 +1,10 @@
 package com.xupt.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.xupt.configer.MybatisRedisCache;
 import com.xupt.pojo.HallSeat;
 import java.util.List;
+import org.apache.ibatis.annotations.CacheNamespace;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -11,6 +13,7 @@ import org.apache.ibatis.annotations.Param;
  * @author ajian
  * @since 2022-06-03 14:37:43
  */
+@CacheNamespace(implementation = MybatisRedisCache.class, eviction = MybatisRedisCache.class)
 public interface HallSeatMapper extends BaseMapper<HallSeat> {
 
   /**
