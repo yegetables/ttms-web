@@ -42,3 +42,11 @@ oos.filehost: head
 # authCode
 codeSend.secretId=azsglkasegklsdfjghaws
 codeSend.secretKey=sdlkngasdophoserh
+
+# redis-cache
+spring.cache.cache-names=redisCache1
+spring.cache.type=redis
+spring.cache.redis.cache-null-values=true
+spring.cache.redis.key-prefix=ttms
+spring.cache.redis.time-to-live=
+spring.cache.redis.use-key-prefix=true

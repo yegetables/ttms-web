@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SortRuleType {
-private String sortRule;
-private String sortType;
+  private String sortRule;
+  private String sortType;
 }

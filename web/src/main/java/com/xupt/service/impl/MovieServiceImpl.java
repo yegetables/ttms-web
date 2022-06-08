@@ -41,14 +41,14 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie> implements
 
   @Override
   public Page<Movie> queryMovieListAndSort(Page<Movie> page, SortRuleType sortRuleType) {
-    if(sortRuleType.getSortType()==null){
-      QueryWrapper<Movie> queryWrapper=new QueryWrapper<>();
+    if (sortRuleType.getSortType() == null) {
+      QueryWrapper<Movie> queryWrapper = new QueryWrapper<>();
       page.setDesc(sortRuleType.getSortRule());
       Page<Movie> moviePage = movieMapper.selectPage(page, queryWrapper);
       return moviePage;
     }
-    QueryWrapper<Movie> queryWrapper=new QueryWrapper<>();
-    queryWrapper.like("movie_type",sortRuleType.getSortType());
+    QueryWrapper<Movie> queryWrapper = new QueryWrapper<>();
+    queryWrapper.like("movie_type", sortRuleType.getSortType());
     page.setDesc(sortRuleType.getSortRule());
     Page<Movie> moviePage = movieMapper.selectPage(page, queryWrapper);
     return moviePage;

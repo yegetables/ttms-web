@@ -38,7 +38,7 @@ public class LoginController {
   /** 处理没有权限 */
   @RequestMapping("/login403")
   public ServerResponse<Boolean> login403() {
-    return ServerResponse.createByErrorMsg("没有权限");
+    return ServerResponse.createByErrorMsg("token错误，请重新登陆");
   }
 
   /**
@@ -56,7 +56,9 @@ public class LoginController {
       log.info("[login/Password]" + "密码为空");
       return ServerResponse.createByErrorMsg("密码不能为空");
     }
-    if (map.containsKey("email") && map.containsKey("phoneNum")) {
+    String phoneNum = map.get("phoneNum");
+    String email = map.get("email");
+    if (!StringUtils.isBlank(email) && !StringUtils.isBlank(phoneNum)) {
       log.info("[login/Password]" + "email和phoneNum不能同时存在");
       return ServerResponse.createByErrorMsg("email和phoneNum不能同时存在");
     }
