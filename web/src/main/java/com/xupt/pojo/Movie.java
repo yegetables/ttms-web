@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import java.io.Serializable;
 import java.util.ArrayList;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -57,11 +56,6 @@ public class Movie extends Model<Movie> {
 
   /** 想看的数目 */
   private Long wantLook;
-
-  @Override
-  protected Serializable pkVal() {
-    return this.id;
-  }
 
   private String typesArrToString(ArrayList<String> types) {
     StringBuffer rs = new StringBuffer();

@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -56,14 +55,4 @@ public class UserOrder extends Model<UserOrder> {
 
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private Date payTime;
-
-  /**
-   * 获取主键值
-   *
-   * @return 主键值
-   */
-  @Override
-  protected Serializable pkVal() {
-    return this.id;
-  }
 }

@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -33,14 +32,4 @@ public class HallSeat extends Model<HallSeat> {
   private Integer orderId;
   // 票是否已售
   private Integer ticketStatus;
-
-  /**
-   * 获取主键值
-   *
-   * @return 主键值
-   */
-  @Override
-  protected Serializable pkVal() {
-    return this.id;
-  }
 }

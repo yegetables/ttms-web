@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -28,14 +27,4 @@ public class MovieSell extends Model<MovieSell> {
   private Integer sellId;
   // 售票员赚得钱
   private Float sellMoney;
-
-  /**
-   * 获取主键值
-   *
-   * @return 主键值
-   */
-  @Override
-  protected Serializable pkVal() {
-    return this.id;
-  }
 }

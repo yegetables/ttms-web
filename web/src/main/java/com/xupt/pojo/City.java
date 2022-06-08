@@ -2,7 +2,6 @@ package com.xupt.pojo;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -24,9 +23,4 @@ public class City extends Model<City> {
 
   /** 省的Id */
   private Integer provinceId;
-
-  @Override
-  protected Serializable pkVal() {
-    return null;
-  }
 }

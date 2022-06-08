@@ -1,9 +1,9 @@
 package com.xupt.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.api.ApiController;
-import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xupt.common.ApiController;
+import com.xupt.common.R;
 import com.xupt.pojo.Users;
 import com.xupt.service.UsersService;
 import com.xupt.utils.PHPass;

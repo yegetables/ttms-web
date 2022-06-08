@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -42,9 +41,4 @@ public class CinemaMovies extends Model<CinemaMovies> {
   /** 当天的日期 */
   @JsonFormat(pattern = "yyyy-MM-dd")
   private String day;
-
-  @Override
-  protected Serializable pkVal() {
-    return this.id;
-  }
 }

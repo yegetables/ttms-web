@@ -32,11 +32,6 @@
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.mybatis.spring.boot</groupId>
-      <artifactId>mybatis-spring-boot-starter</artifactId>
-      <version>2.2.2</version>
-    </dependency>
-    <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter</artifactId>
       <exclusions>
@@ -87,6 +82,11 @@
       <version>3.5.1</version>
     </dependency>
     <dependency>
+      <artifactId>mybatis-plus-boot-starter-test</artifactId>
+      <groupId>com.baomidou</groupId>
+      <version>3.5.2</version>
+    </dependency>
+    <dependency>
       <groupId>io.jsonwebtoken</groupId>
       <artifactId>jjwt-api</artifactId>
       <version>0.11.5</version>
@@ -115,11 +115,6 @@
       <version>1.4</version>
     </dependency>
     <dependency>
-      <groupId>com.baomidou</groupId>
-      <artifactId>mybatis-plus-extension</artifactId>
-      <version>3.3.1.tmp</version>
-    </dependency>
-    <dependency>
       <groupId>com.tencentcloudapi</groupId>
       <artifactId>tencentcloud-sdk-java</artifactId>
       <version>3.1.449</version><!-- -->
@@ -142,7 +137,11 @@
       <groupId>com.diffplug.spotless</groupId>
       <artifactId>spotless-maven-plugin</artifactId>
       <version>2.22.5</version>
-
+    </dependency>
+    <dependency>
+      <artifactId>mybatis-plus-extension</artifactId>
+      <groupId>com.baomidou</groupId>
+      <version>3.5.1</version>
     </dependency>
   </dependencies>
 

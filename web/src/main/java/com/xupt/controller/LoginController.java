@@ -286,13 +286,14 @@ public class LoginController {
 
   private ServerResponse<Users> checkoutUserExist(Users u) {
     if (u.getPhoneNum() != null) {
-      Users user = usersService.getOne(new QueryWrapper<Users>().eq("phone_num", u.getPhoneNum()));
+      Users user =
+          usersService.getOne(new QueryWrapper<Users>(new Users().setPhoneNum(u.getPhoneNum())));
       if (user != null) {
         return ServerResponse.createBySuccessMsgData("手机号已存在", user);
       }
     }
     if (u.getEmail() != null) {
-      Users user = usersService.getOne(new QueryWrapper<Users>().eq("email", u.getEmail()));
+      Users user = usersService.getOne(new QueryWrapper<Users>(new Users().setEmail(u.getEmail())));
       if (user != null) {
         return ServerResponse.createBySuccessMsgData("邮箱已存在", user);
       }
