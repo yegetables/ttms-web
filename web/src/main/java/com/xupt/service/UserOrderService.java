@@ -12,5 +12,6 @@ import com.xupt.pojo.UserOrder;
  */
 public interface UserOrderService extends IService<UserOrder> {
   boolean buyTicket(UserOrder userOrder, HallSeat hallSeat);
+
   boolean returnTicket(UserOrder userOrder);
 }

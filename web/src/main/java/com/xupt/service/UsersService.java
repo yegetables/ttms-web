@@ -16,6 +16,4 @@ public interface UsersService extends IService<Users> {
   void register(Users newUsers);
 
   List<Users> getAllUsers();
-
-
 }

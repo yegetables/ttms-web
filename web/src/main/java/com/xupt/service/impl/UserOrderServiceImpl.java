@@ -11,10 +11,7 @@ import com.xupt.pojo.UserOrder;
 import com.xupt.service.UserOrderService;
 import com.xupt.utils.BigDecimalUtils;
 import com.xupt.utils.RedisUtils;
-import java.util.List;
-import javax.management.QueryEval;
-import org.apache.catalina.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 /**
@@ -26,17 +23,13 @@ import org.springframework.stereotype.Service;
 @Service("userOrderService")
 public class UserOrderServiceImpl extends ServiceImpl<UserOrderMapper, UserOrder>
     implements UserOrderService {
-  @Autowired
-  RedisUtils redisUtils;
-  @Autowired
-  HallSeatMapper hallSeatMapper;
-  @Autowired
-  UserOrderMapper userOrderMapper;
-  @Autowired
-  MovieMapper movieMapper;
-  @Autowired
-  BigDecimalUtils bigDecimalUtils;
-  public boolean buyTicket(UserOrder userOrder,HallSeat hallSeat){
+  @Resource RedisUtils redisUtils;
+  @Resource HallSeatMapper hallSeatMapper;
+  @Resource UserOrderMapper userOrderMapper;
+  @Resource MovieMapper movieMapper;
+  @Resource BigDecimalUtils bigDecimalUtils;
+
+  public boolean buyTicket(UserOrder userOrder, HallSeat hallSeat) {
     try {
       userOrderMapper.insert(userOrder);
       QueryWrapper<UserOrder> orderQueryWrapper = new QueryWrapper<>(userOrder);

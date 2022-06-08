@@ -4,12 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.api.ApiController;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.xupt.dao.MovieMapper;
 import com.xupt.pojo.Movie;
 import com.xupt.pojo.SortRuleType;
 import com.xupt.service.MovieService;
-import com.xupt.utils.AliyunOSSUtils;
-import com.xupt.utils.RedisUtils;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.Resource;
@@ -32,10 +29,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Log4j2
 public class MovieController extends ApiController {
 
-  // 1.查询单个电影 2.按照需求排序电影列表并返回 3.添加电影 4.删除电影
-  @Resource RedisUtils redisUtils;
-  @Resource MovieMapper movieMapper;
-  @Resource AliyunOSSUtils aliyunOSSUtils;
   @Resource MovieService movieService;
 
   /**
@@ -118,12 +111,6 @@ public class MovieController extends ApiController {
     }
     return failed("修改失败");
   }
-}
-
-@Data
-class MovieAndPage<T> {
-  private Page<T> page;
-  private Movie movie;
 }
 
 @Data

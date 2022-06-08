@@ -3,7 +3,6 @@ package com.xupt.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xupt.common.ResponseCode;
 import com.xupt.common.ServerResponse;
-import com.xupt.dao.UsersMapper;
 import com.xupt.pojo.Users;
 import com.xupt.service.UsersService;
 import com.xupt.utils.CodeUtils;
@@ -33,7 +32,6 @@ public class LoginController {
   @Resource private PHPass phPass;
   @Resource private CodeUtils codeUtils;
   @Resource private UsersService usersService;
-  @Resource private UsersMapper usersMapper;
 
   /** 处理没有权限 */
   @RequestMapping("/login403")

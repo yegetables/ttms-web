@@ -46,8 +46,7 @@ public class MoviePlanController extends ApiController {
       return failed("日期与其它演出计划冲突");
     }
     log.info("[演出计划添加]开始添加");
-    moviePlanService.insert(plan);
-    moviePlanService.initSeat(plan);
+    moviePlanService.newPlan(plan);
     return success(plan);
   }
   // 更改演出计划

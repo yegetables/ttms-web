@@ -57,7 +57,7 @@ public class MoviePlanServiceImpl extends ServiceImpl<MoviePlanMapper, MoviePlan
   public List<MoviePlan> getMovieListByCinemaId(Integer id) {
     String nowDate = DateFormatUtils.format(new Date(), "yyyy-MM-dd" + " 00:00:00");
     QueryWrapper<MoviePlan> queryWrapper = new QueryWrapper<>();
-    queryWrapper.eq("cinema_id", id);
+    queryWrapper.eq("cinema_movie_id", id);
     queryWrapper.ge("movie_start_time", nowDate);
     List<MoviePlan> moviePlans = moviePlanMapper.selectList(queryWrapper);
     return moviePlans;
@@ -65,58 +65,56 @@ public class MoviePlanServiceImpl extends ServiceImpl<MoviePlanMapper, MoviePlan
 
   public List<MoviePlan> getMovieListByDate(String date) {
     String nowDate = DateFormatUtils.format(new Date(), "yyyy-MM-dd" + " 00:00:00");
-
-    // String nowDay=DateFormatUtils.format(new Date(),"yyyy-MM-dd");
     List<MoviePlan> movieListByDate = moviePlanMapper.getMovieListByDate(nowDate, date);
     return movieListByDate;
   }
 
   public void update(MoviePlan plan) {
-    QueryWrapper<MoviePlan> queryWrapper = new QueryWrapper<>();
-    queryWrapper.eq("id", plan.getId());
-    moviePlanMapper.update(plan, queryWrapper);
+    if (plan == null) return;
+    moviePlanMapper.update(plan, new QueryWrapper<>(new MoviePlan().setId(plan.getId())));
   }
 
   public void initSeat(MoviePlan plan) {
-    QueryWrapper<MovieHall> queryWrapper = new QueryWrapper<>();
-    queryWrapper.eq("id", plan.getHallId());
-    MovieHall hall = movieHallMapper.selectOne(queryWrapper);
-    System.out.println(hall);
+    if (plan == null) return;
+    MovieHall hall =
+        movieHallMapper.selectOne(new QueryWrapper<>(new MovieHall().setId(plan.getHallId())));
+    if (hall == null) return;
     int column = hall.getSeatColumn();
     int line = hall.getSeatLine();
     for (int i = 1; i <= column; i++)
       for (int j = 1; j <= line; j++) {
-        HallSeat hallSeat = new HallSeat();
-        hallSeat.setMoviePlanId(plan.getId());
-        hallSeat.setSeatColumn(i);
-        hallSeat.setSeatLine(j);
-        hallSeat.setTicketStatus(1);
-        hallSeat.setOrderId(-1);
+        HallSeat hallSeat =
+            new HallSeat()
+                .setMoviePlanId(plan.getId())
+                .setSeatColumn(i)
+                .setSeatLine(j)
+                .setTicketStatus(1)
+                .setOrderId(-1);
         hallSeatMapper.insert(hallSeat);
       }
   }
 
   public void deleteSeat(Integer id) {
-    QueryWrapper<MoviePlan> queryWrapper3 = new QueryWrapper<>();
-    queryWrapper3.eq("id", id);
-    MoviePlan plan = moviePlanMapper.selectOne(queryWrapper3);
-    QueryWrapper<MovieHall> queryWrapper = new QueryWrapper<>();
-    queryWrapper.eq("id", plan.getHallId());
-    MovieHall hall = movieHallMapper.selectOne(queryWrapper);
+    MoviePlan plan = moviePlanMapper.selectOne(new QueryWrapper<>(new MoviePlan().setId(id)));
+    if (plan == null) return;
+    MovieHall hall =
+        movieHallMapper.selectOne(new QueryWrapper<>(new MovieHall().setId(plan.getHallId())));
+    if (hall == null) return;
     int column = hall.getSeatColumn();
     int line = hall.getSeatLine();
     for (int i = 1; i <= column; i++)
       for (int j = 1; j <= line; j++) {
-        QueryWrapper<HallSeat> queryWrapper2 = new QueryWrapper<>();
-        queryWrapper2.eq("seat_column", i);
-        queryWrapper2.eq("seat_line", j);
-        hallSeatMapper.delete(queryWrapper2);
+        hallSeatMapper.delete(new QueryWrapper<>(new HallSeat().setSeatColumn(i).setSeatLine(j)));
       }
   }
 
   public void delete(Integer id) {
-    QueryWrapper<MoviePlan> queryWrapper = new QueryWrapper<>();
-    queryWrapper.eq("id", id);
-    moviePlanMapper.delete(queryWrapper);
+    moviePlanMapper.delete(new QueryWrapper<>(new MoviePlan().setId(id)));
+  }
+
+  @Override
+  public void newPlan(MoviePlan plan) {
+    insert(plan);
+    initSeat(plan);
   }
 }

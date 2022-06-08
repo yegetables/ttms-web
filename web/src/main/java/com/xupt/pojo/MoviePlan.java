@@ -40,8 +40,6 @@ public class MoviePlan extends Model<MoviePlan> {
   /** 某个时间段的钱 */
   private Float ticketMoney;
 
-  private Integer cinemaId;
-
   @Override
   protected Serializable pkVal() {
     return this.id;

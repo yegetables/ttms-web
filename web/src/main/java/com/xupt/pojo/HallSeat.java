@@ -27,7 +27,7 @@ public class HallSeat extends Model<HallSeat> {
   private Integer seatLine;
   // 座位的列
   private Integer seatColumn;
-  // 某一个电影院的某部电影的某个时间段的id
+  // 演出计划Id
   private Integer moviePlanId;
   // 订单id
   private Integer orderId;

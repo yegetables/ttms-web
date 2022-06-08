@@ -27,4 +27,6 @@ public interface MoviePlanService extends IService<MoviePlan> {
   public void deleteSeat(Integer id);
 
   public void delete(Integer id);
+
+  public void newPlan(MoviePlan plan);
 }
