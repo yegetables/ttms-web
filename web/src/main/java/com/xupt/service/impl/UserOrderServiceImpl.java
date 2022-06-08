@@ -3,10 +3,14 @@ package com.xupt.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xupt.dao.HallSeatMapper;
+import com.xupt.dao.MovieHallMapper;
 import com.xupt.dao.MovieMapper;
+import com.xupt.dao.MoviePlanMapper;
 import com.xupt.dao.UserOrderMapper;
 import com.xupt.pojo.HallSeat;
 import com.xupt.pojo.Movie;
+import com.xupt.pojo.MovieHall;
+import com.xupt.pojo.MoviePlan;
 import com.xupt.pojo.UserOrder;
 import com.xupt.service.UserOrderService;
 import com.xupt.utils.BigDecimalUtils;
@@ -36,8 +40,29 @@ public class UserOrderServiceImpl extends ServiceImpl<UserOrderMapper, UserOrder
   MovieMapper movieMapper;
   @Autowired
   BigDecimalUtils bigDecimalUtils;
+  @Autowired
+  MoviePlanMapper moviePlanMapper;
+  @Autowired
+  MovieHallMapper movieHallMapper;
   public boolean buyTicket(UserOrder userOrder,HallSeat hallSeat){
     try {
+      QueryWrapper<Movie> movieQueryWrapper=new QueryWrapper<>();
+      movieQueryWrapper.eq("id",userOrder.getMovieId());
+      Movie movie = movieMapper.selectOne(movieQueryWrapper);
+      movie.setMovieMoney(bigDecimalUtils.addDouble(movie.getMovieMoney(),userOrder.getOrderMoney()));
+      movieMapper.update(movie,movieQueryWrapper);
+      userOrder.setMovieHead(movie.getMovieHead());
+      userOrder.setMovieName(movie.getMovieName());
+      userOrder.setMovieType(movie.getMovieType());
+      userOrder.setMovieTime(movie.getMovieMinute());
+      QueryWrapper<MoviePlan> planQueryWrapper=new QueryWrapper<>();
+      planQueryWrapper.eq("id",userOrder.getPlanId());
+      MoviePlan plan=moviePlanMapper.selectOne(planQueryWrapper);
+      int hallId=plan.getHallId();
+      QueryWrapper<MovieHall> hallQueryWrapper=new QueryWrapper<>();
+      MovieHall hall=movieHallMapper.selectOne(hallQueryWrapper);
+      userOrder.setHallName(hall.getHallName());
+      userOrder.setTicketMoney(Double.valueOf(plan.getTicketMoney()));
       userOrderMapper.insert(userOrder);
       QueryWrapper<UserOrder> orderQueryWrapper = new QueryWrapper<>(userOrder);
       UserOrder userOrder1 = userOrderMapper.selectOne(orderQueryWrapper);
@@ -49,11 +74,7 @@ public class UserOrderServiceImpl extends ServiceImpl<UserOrderMapper, UserOrder
       hallSeat1.setTicketStatus(1);
       hallSeat1.setOrderId(userOrder1.getId());
       hallSeatMapper.update(hallSeat1, queryWrapper);
-      QueryWrapper<Movie> movieQueryWrapper=new QueryWrapper<>();
-      movieQueryWrapper.eq("id",userOrder.getMovieId());
-      Movie movie = movieMapper.selectOne(movieQueryWrapper);
-      movie.setMovieMoney(bigDecimalUtils.addDouble(movie.getMovieMoney(),userOrder.getOrderMoney()));
-      movieMapper.update(movie,movieQueryWrapper);
+
       return true;
     }catch (Exception e){
       return false;
