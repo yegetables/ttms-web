@@ -5,15 +5,14 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xupt.common.ApiController;
 import com.xupt.common.R;
 import com.xupt.pojo.HallSeat;
+import com.xupt.pojo.MoviePlan;
 import com.xupt.service.HallSeatService;
-import java.io.Serializable;
+import com.xupt.service.MoviePlanService;
 import java.util.List;
 import javax.annotation.Resource;
 import lombok.Data;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,6 +33,8 @@ public class HallSeatController extends ApiController {
   /** 服务对象 */
   @Resource private HallSeatService hallSeatService;
 
+  @Resource private MoviePlanService moviePlanService;
+
   /**
    * 分页查询所有数据
    *
@@ -43,20 +44,11 @@ public class HallSeatController extends ApiController {
    */
   @PostMapping
   public R selectAll(@RequestBody HallSeatAndPage<HallSeat> hallSeatAndPage) {
+    if (hallSeatAndPage == null) return failed("参数错误");
     Page<HallSeat> page = hallSeatAndPage.getPage();
+    if (page == null) return failed("参数错误");
     HallSeat hallSeat = hallSeatAndPage.getHallSeat();
-    return success(this.hallSeatService.page(page, new QueryWrapper<>(hallSeat)));
-  }
-
-  /**
-   * 通过主键查询单条数据
-   *
-   * @param id 主键
-   * @return 单条数据
-   */
-  @GetMapping("{id}")
-  public R selectOne(@PathVariable Serializable id) {
-    return success(this.hallSeatService.getById(id));
+    return success(hallSeatService.page(page, new QueryWrapper<>(hallSeat)));
   }
 
   /**
@@ -67,6 +59,12 @@ public class HallSeatController extends ApiController {
    */
   @PostMapping("/new")
   public R insert(@RequestBody HallSeat hallSeat) {
+    if (hallSeat == null
+        || hallSeat.getSeatLine() == null
+        || hallSeat.getSeatColumn() == null
+        || hallSeat.getMoviePlanId() == null
+        || hallSeat.getTicketStatus() == null) return failed("参数错误");
+    if (!checkPlanExist(hallSeat.getMoviePlanId())) return failed("影片计划不存在，请检查影片计划id是否正确");
     boolean isSuccess = this.hallSeatService.save(hallSeat);
     if (isSuccess) {
       return success(hallSeat);
@@ -82,6 +80,9 @@ public class HallSeatController extends ApiController {
    */
   @PutMapping
   public R update(@RequestBody HallSeat hallSeat) {
+    if (hallSeat == null || hallSeat.getId() == null) return failed("参数错误");
+    if (hallSeat.getMoviePlanId() != null && !checkPlanExist(hallSeat.getMoviePlanId()))
+      return failed("影片计划不存在，请检查影片计划id是否正确");
     boolean isSuccess = this.hallSeatService.updateById(hallSeat);
     if (isSuccess) {
       hallSeat = this.hallSeatService.getById(hallSeat.getId());
@@ -104,10 +105,17 @@ public class HallSeatController extends ApiController {
     }
     return failed("删除失败");
   }
+
+  private boolean checkPlanExist(Integer moviePlanId) {
+    long l =
+        moviePlanService.count(new QueryWrapper<MoviePlan>(new MoviePlan().setId(moviePlanId)));
+    if (l != 1) return false;
+    return true;
+  }
 }
 
 @Data
 class HallSeatAndPage<T> {
-  private HallSeat hallSeat;
   private Page<T> page;
+  private HallSeat hallSeat;
 }

@@ -4,15 +4,18 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xupt.dao.HallSeatMapper;
 import com.xupt.dao.MovieMapper;
+import com.xupt.dao.MoviePlanMapper;
 import com.xupt.dao.UserOrderMapper;
 import com.xupt.pojo.HallSeat;
 import com.xupt.pojo.Movie;
+import com.xupt.pojo.MoviePlan;
 import com.xupt.pojo.UserOrder;
 import com.xupt.service.UserOrderService;
 import com.xupt.utils.BigDecimalUtils;
 import com.xupt.utils.RedisUtils;
 import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * (UserOrder)表服务实现类
@@ -27,55 +30,55 @@ public class UserOrderServiceImpl extends ServiceImpl<UserOrderMapper, UserOrder
   @Resource HallSeatMapper hallSeatMapper;
   @Resource UserOrderMapper userOrderMapper;
   @Resource MovieMapper movieMapper;
+  @Resource MoviePlanMapper moviePlanMapper;
   @Resource BigDecimalUtils bigDecimalUtils;
 
+  @Transactional
   public boolean buyTicket(UserOrder userOrder, HallSeat hallSeat) {
-    try {
-      userOrderMapper.insert(userOrder);
-      QueryWrapper<UserOrder> orderQueryWrapper = new QueryWrapper<>(userOrder);
-      UserOrder userOrder1 = userOrderMapper.selectOne(orderQueryWrapper);
-      QueryWrapper<HallSeat> queryWrapper = new QueryWrapper<>();
-      queryWrapper.eq("seat_line", hallSeat.getSeatLine());
-      queryWrapper.eq("seat_column", hallSeat.getSeatColumn());
-      queryWrapper.eq("movie_plan_id", hallSeat.getMoviePlanId());
-      HallSeat hallSeat1 = hallSeatMapper.selectOne(queryWrapper);
-      hallSeat1.setTicketStatus(1);
-      hallSeat1.setOrderId(userOrder1.getId());
-      hallSeatMapper.update(hallSeat1, queryWrapper);
-      QueryWrapper<Movie> movieQueryWrapper = new QueryWrapper<>();
-      movieQueryWrapper.eq("id", userOrder.getMovieId());
-      Movie movie = movieMapper.selectOne(movieQueryWrapper);
-      movie.setMovieMoney(
-          bigDecimalUtils.addDouble(movie.getMovieMoney(), userOrder.getOrderMoney()));
-      movieMapper.update(movie, movieQueryWrapper);
-      return true;
-    } catch (Exception e) {
-      return false;
+
+    userOrderMapper.insert(userOrder);
+    hallSeat = hallSeatMapper.selectById(hallSeat.getId());
+    if (hallSeat.getTicketStatus() == 0) {
+      throw new RuntimeException("影厅已售罄");
     }
+    hallSeat.setTicketStatus(0);
+    hallSeat.setOrderId(userOrder.getId());
+    hallSeatMapper.updateById(hallSeat);
+    MoviePlan plan =
+        moviePlanMapper.selectOne(new QueryWrapper<>(new MoviePlan().setId(userOrder.getPlanId())));
+    Movie moive =
+        movieMapper.selectOne(new QueryWrapper<>(new Movie().setId(plan.getCinemaMovieId())));
+    moive.setDayMoney(moive.getDayMoney() + userOrder.getOrderMoney());
+    moive.setMovieMoney(moive.getMovieMoney() + userOrder.getOrderMoney());
+    movieMapper.updateById(moive);
+    return true;
   }
 
   @Override
   public boolean returnTicket(UserOrder userOrder) {
-    try {
-      int id = userOrder.getId();
-      QueryWrapper<HallSeat> queryWrapper = new QueryWrapper<>();
-      queryWrapper.eq("order_id", id);
-      HallSeat hallSeat = hallSeatMapper.selectOne(queryWrapper);
-      hallSeat.setOrderId(-1);
-      hallSeat.setTicketStatus(-1);
-      hallSeatMapper.update(hallSeat, queryWrapper);
-      QueryWrapper<UserOrder> orderQueryWrapper = new QueryWrapper<>();
-      orderQueryWrapper.eq("id", userOrder.getId());
-      userOrderMapper.delete(orderQueryWrapper);
-      QueryWrapper<Movie> movieQueryWrapper = new QueryWrapper<>();
-      movieQueryWrapper.eq("id", userOrder.getMovieId());
-      Movie movie = movieMapper.selectOne(movieQueryWrapper);
-      movie.setMovieMoney(
-          bigDecimalUtils.subDouble(movie.getMovieMoney(), userOrder.getOrderMoney()));
-      movieMapper.update(movie, movieQueryWrapper);
-      return true;
-    } catch (Exception e) {
-      return false;
+    //    try {
+    int id = userOrder.getId();
+    UserOrder order = userOrderMapper.selectById(id);
+    if (order == null) {
+      throw new RuntimeException("订单不存在");
     }
+    HallSeat hallSeat = hallSeatMapper.selectOne(new QueryWrapper<>(new HallSeat().setOrderId(id)));
+    hallSeat.setOrderId(-1);
+    hallSeat.setTicketStatus(-1);
+    //      hallSeatMapper.update(hallSeat, );
+    //      QueryWrapper<UserOrder> orderQueryWrapper = new QueryWrapper<>();
+    //      orderQueryWrapper.eq("id", userOrder.getId());
+    //      userOrderMapper.delete(orderQueryWrapper);
+    //      QueryWrapper<Movie> movieQueryWrapper = new QueryWrapper<>();
+    //      movieQueryWrapper.eq("id", userOrder.getMovieId());
+    //      Movie movie = movieMapper.selectOne(movieQueryWrapper);
+    //      movie.setMovieMoney(
+    //          bigDecimalUtils.subDouble(movie.getMovieMoney(), userOrder.getOrderMoney()));
+    //      movieMapper.update(movie, movieQueryWrapper);
+    //      return true;
+    //    } catch (Exception e) {
+    //      return false;
+    //    }
+    return false;
   }
 }

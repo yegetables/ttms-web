@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class LoginController {
   @Resource private RedisUtils redisUtils;
   @Resource private MailTools mailTools;
-  @Resource private PHPass phPass;
   @Resource private CodeUtils codeUtils;
   @Resource private UsersService usersService;
 
@@ -242,19 +241,9 @@ public class LoginController {
       log.warn("[register]" + "验证码错误");
       return ServerResponse.createByErrorMsg("验证码错误");
     }
-    Users newUsers = new Users();
-    newUsers.setUsername(username);
-    newUsers.setPassword(phPass.HashPassword(password));
-    newUsers.setEmail(map.get("email"));
-    newUsers.setPhoneNum(map.get("phoneNum"));
-    if (map.containsKey("age")) {
-      newUsers.setAge(Integer.parseInt(map.get("age")));
-    }
-    if (map.containsKey("gender")) {
-      newUsers.setGender(map.get("gender"));
-    }
+
     try {
-      usersService.register(newUsers);
+      Users newUsers = usersService.register(map);
       log.info("[register]注册成功" + newUsers.toString());
       return ServerResponse.createBySuccessMsg("注册成功");
     } catch (Exception e) {

@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xupt.common.ApiController;
 import com.xupt.common.R;
 import com.xupt.pojo.MoviePlan;
-import com.xupt.service.HallSeatService;
 import com.xupt.service.MoviePlanService;
 import java.util.List;
 import javax.annotation.Resource;
@@ -30,40 +29,41 @@ import org.springframework.web.bind.annotation.RestController;
 @Log4j2
 @RestController
 public class MoviePlanController extends ApiController {
-  // 1.添加演出计划
-  // 2.查询演出计划 演出计划按照时间顺序排序
-  // 3.修改演出计划
-  // 4.删除演出计划
-  // **注意关联座位
-  @Resource MoviePlanService moviePlanService;
 
-  @Resource HallSeatService hallSeatService;
+  @Resource MoviePlanService moviePlanService;
 
   @PostMapping("/new")
   public R addMoviePlan(@RequestBody MoviePlan plan) {
-    if (!moviePlanService.checkDate(plan)) {
-      log.error("[演出计划添加]日期冲突");
-      return failed("日期与其它演出计划冲突");
-    }
-    log.info("[演出计划添加]开始添加");
-    moviePlanService.newPlan(plan);
-    return success(plan);
+    if (plan == null
+        || plan.getMovieEndTime() == null
+        || plan.getMovieStartTime() == null
+        || plan.getHallId() == null
+        || plan.getCinemaMovieId() == null
+        || plan.getTicketMoney() == null) return failed("plan字段填写错误");
+
+    if (moviePlanService.newPlan(plan)) return success(plan);
+    return failed("演出计划添加失败");
   }
   // 更改演出计划
   @PutMapping
   public R updateMoviePlan(@RequestBody MoviePlan plan) {
-    if (!moviePlanService.checkDate(plan)) {
-      return failed("日期冲突");
+    if (plan == null
+        || plan.getId() == null
+        || plan.getMovieEndTime() == null
+        || plan.getMovieStartTime() == null) return failed("plan字段填写错误");
+    if (moviePlanService.update(plan)) {
+      plan = moviePlanService.getById(plan.getId());
+      return success(plan);
     }
-    moviePlanService.update(plan);
-    plan = moviePlanService.getById(plan.getId());
-    return success(plan);
+    return failed("更新演出计划失败");
   }
 
   @PostMapping
   public R selectAll(@RequestBody MoviePlanAndPage<MoviePlan> moviePlanAndPage) {
+    if (moviePlanAndPage == null) return failed("参数错误");
     Page<MoviePlan> page = moviePlanAndPage.getPage();
     MoviePlan moviePlan = moviePlanAndPage.getMoviePlan();
+    if (page == null) return failed("无page信息");
     return success(this.moviePlanService.page(page, new QueryWrapper<>(moviePlan)));
   }
 
@@ -75,15 +75,9 @@ public class MoviePlanController extends ApiController {
    */
   @DeleteMapping
   public R delete(@RequestParam("idList") List<Long> idList) {
-    boolean isSuccess = this.moviePlanService.removeByIds(idList);
-    if (isSuccess) {
-      isSuccess = hallSeatService.removeByIds(idList);
-      if (isSuccess) {
-        return success("删除成功");
-      }
-      return failed("演出计划删除成功，座位删除失败");
-    }
-    return failed("删除失败");
+    if (idList == null || idList.size() == 0) return failed("参数错误");
+    moviePlanService.deleteAll(idList);
+    return success("删除成功");
   }
 }
 

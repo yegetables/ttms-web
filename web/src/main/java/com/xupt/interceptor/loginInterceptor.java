@@ -14,12 +14,36 @@ import org.springframework.web.servlet.ModelAndView;
 public class loginInterceptor implements HandlerInterceptor {
   @Resource RedisUtils redisUtils;
 
+  public static Integer getToken(String token) {
+    Claims claims =
+        Jwts.parser()
+            .setSigningKey("cereshuzhitingnizhenbangcereshuzhitingnizhenbang")
+            .parseClaimsJws(token)
+            .getBody();
+    String tokenUserId = (String) claims.get("userId");
+    return Integer.parseInt(tokenUserId);
+  }
+
+  @Override
+  public void postHandle(
+      HttpServletRequest request,
+      HttpServletResponse response,
+      Object handler,
+      ModelAndView modelAndView)
+      throws Exception {}
+
+  @Override
+  public void afterCompletion(
+      HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
+      throws Exception {}
+
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
       throws Exception {
     log.info("===》请求的url：" + request.getRequestURI());
     if (request.getRequestURI().contains("/login")
         || request.getRequestURI().contains("/register")
+        || request.getRequestURI().endsWith("/movie")
         || request.getRequestURI().contains("/static")) return true;
     final String headerToken = request.getHeader("token");
     log.info("获得token:" + headerToken);
@@ -57,17 +81,4 @@ public class loginInterceptor implements HandlerInterceptor {
       return false;
     }
   }
-
-  @Override
-  public void postHandle(
-      HttpServletRequest request,
-      HttpServletResponse response,
-      Object handler,
-      ModelAndView modelAndView)
-      throws Exception {}
-
-  @Override
-  public void afterCompletion(
-      HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
-      throws Exception {}
 }

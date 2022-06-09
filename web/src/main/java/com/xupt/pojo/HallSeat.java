@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * (HallSeat)表实体类
+ * (HallSeat)表实体类 座位
  *
  * @author ajian
  * @since 2022-06-03 14:44:16

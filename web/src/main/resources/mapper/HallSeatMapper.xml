@@ -3,7 +3,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xupt.dao.HallSeatMapper">
 
-  <resultMap type="com.xupt.pojo.HallSeat" id="HallSeatMap">
+  <resultMap id="BaseResultMap" type="com.xupt.pojo.HallSeat">
     <result property="id" column="id" jdbcType="INTEGER"/>
     <result property="seatLine" column="seat_line" jdbcType="INTEGER"/>
     <result property="seatColumn" column="seat_column" jdbcType="INTEGER"/>

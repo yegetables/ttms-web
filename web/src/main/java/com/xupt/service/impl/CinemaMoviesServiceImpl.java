@@ -47,7 +47,7 @@ public class CinemaMoviesServiceImpl extends ServiceImpl<CinemaMoviesMapper, Cin
               null,
               userOrder.getTicketMoney(),
               userOrder.getTicketMoney(),
-              day));
+              userOrder.getMovieStartTime()));
     } else if (cinemaMovies == null && list.size() != 0) {
       Double tmp =
           bigDecimalUtils.addDouble(list.get(0).getCinemaMovieMoney(), userOrder.getTicketMoney());
@@ -59,7 +59,7 @@ public class CinemaMoviesServiceImpl extends ServiceImpl<CinemaMoviesMapper, Cin
               null,
               userOrder.getTicketMoney(),
               tmp,
-              day));
+              userOrder.getMovieStartTime()));
     } else if (cinemaMovies != null) {
       QueryWrapper<CinemaMovies> queryWrapper2 = new QueryWrapper<>();
       queryWrapper2.eq("id", cinemaMovies.getId());
@@ -73,7 +73,7 @@ public class CinemaMoviesServiceImpl extends ServiceImpl<CinemaMoviesMapper, Cin
               (double) userOrder.getTicketMoney() + cinemaMovies.getDayMoney(),
               bigDecimalUtils.addDouble(
                   userOrder.getTicketMoney(), cinemaMovies.getCinemaMovieMoney()),
-              day),
+              userOrder.getMovieStartTime()),
           queryWrapper2);
     }
   }

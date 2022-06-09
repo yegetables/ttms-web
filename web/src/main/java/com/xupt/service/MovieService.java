@@ -12,7 +12,8 @@ import java.util.List;
  * @since 2022-05-30
  */
 public interface MovieService extends IService<Movie> {
-  List<Movie> queryMovieList(String type, String rule, int page, int pageLimit);
+
+  boolean deleteAll(List<Long> idList);
 
   Page<Movie> queryMovieListAndSort(Page<Movie> page, SortRuleType sortRuleType);
 }

@@ -4,16 +4,21 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xupt.dao.HallSeatMapper;
 import com.xupt.dao.MovieHallMapper;
+import com.xupt.dao.MovieMapper;
 import com.xupt.dao.MoviePlanMapper;
 import com.xupt.pojo.HallSeat;
+import com.xupt.pojo.Movie;
 import com.xupt.pojo.MovieHall;
 import com.xupt.pojo.MoviePlan;
 import com.xupt.service.MoviePlanService;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Resource;
-import org.apache.commons.lang3.time.DateFormatUtils;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 服务实现类
@@ -23,98 +28,108 @@ import org.springframework.stereotype.Service;
 @Service
 public class MoviePlanServiceImpl extends ServiceImpl<MoviePlanMapper, MoviePlan>
     implements MoviePlanService {
-  @Resource MoviePlanMapper moviePlanMapper;
-  @Resource MovieHallMapper movieHallMapper;
+  @Autowired @Lazy MoviePlanServiceImpl moviePlanService;
   @Resource HallSeatMapper hallSeatMapper;
+  @Resource MoviePlanMapper moviePlanMapper;
 
-  public boolean checkDate(MoviePlan plan) {
-    QueryWrapper<MoviePlan> queryWrapper = new QueryWrapper<>();
-    queryWrapper
-        .between("movie_start_time", plan.getMovieStartTime(), plan.getMovieEndTime())
-        .or()
-        .between("movie_end_time", plan.getMovieStartTime(), plan.getMovieEndTime());
-    List<MoviePlan> moviePlans = moviePlanMapper.selectList(queryWrapper);
-    if (moviePlans.size() != 0) {
-      return false;
-    }
+  @Resource MovieHallMapper movieHallMapper;
+  @Resource MovieMapper movieMapper;
+
+  private boolean checkDate(MoviePlan plan) {
+    //    QueryWrapper<MoviePlan> queryWrapper = new QueryWrapper<>();
+    //    queryWrapper
+    //        .between(
+    //            "movie_start_time",
+    //            plan.getMovieStartTime().toString(),
+    //            plan.getMovieEndTime().toString())
+    //        .or()
+    //        .between(
+    //            "movie_end_time",
+    //            plan.getMovieStartTime().toString(),
+    //            plan.getMovieEndTime().toString());
+    //
+    //    new LambdaQueryWrapper<MoviePlan>()
+    //        .apply(plan.getMovieStartTime(),
+    //            "date_format (create_time,'%Y-%m-%d') >= date_format('" + start_date +
+    // "','%Y-%m-%d')")
+    //        .apply(StrUtil.isNotBlank(end_date),
+    //            "date_format (create_time,'%Y-%m-%d') <= date_format('" + end_date +
+    // "','%Y-%m-%d')")
+    //        .orderByDesc(HmsFaceDetectLog::getOptime));
+
+    //    long count = moviePlanMapper.selectCount(queryWrapper);
+    //    return count == 0;
     return true;
   }
 
-  public void insert(MoviePlan plan) {
-    moviePlanMapper.insert(plan);
+  @Transactional
+  public boolean update(@NotNull MoviePlan plan) {
+    moviePlanService.deleteOne(plan.getId());
+    moviePlanService.newPlan(plan);
+    return true;
   }
 
-  public List<MoviePlan> getMovieListByMovieId(Integer id) {
-    String nowDate = DateFormatUtils.format(new Date(), "yyyy-MM-dd" + " 00:00:00");
-
-    QueryWrapper<MoviePlan> queryWrapper = new QueryWrapper<>();
-    queryWrapper.eq("cinema_movie_id", id);
-    queryWrapper.ge("movie_start_time", nowDate);
-    List<MoviePlan> moviePlans = moviePlanMapper.selectList(queryWrapper);
-    return moviePlans;
-  }
-
-  public List<MoviePlan> getMovieListByCinemaId(Integer id) {
-    String nowDate = DateFormatUtils.format(new Date(), "yyyy-MM-dd" + " 00:00:00");
-    QueryWrapper<MoviePlan> queryWrapper = new QueryWrapper<>();
-    queryWrapper.eq("cinema_movie_id", id);
-    queryWrapper.ge("movie_start_time", nowDate);
-    List<MoviePlan> moviePlans = moviePlanMapper.selectList(queryWrapper);
-    return moviePlans;
-  }
-
-  public List<MoviePlan> getMovieListByDate(String date) {
-    String nowDate = DateFormatUtils.format(new Date(), "yyyy-MM-dd" + " 00:00:00");
-    List<MoviePlan> movieListByDate = moviePlanMapper.getMovieListByDate(nowDate, date);
-    return movieListByDate;
-  }
-
-  public void update(MoviePlan plan) {
-    if (plan == null) return;
-    moviePlanMapper.update(plan, new QueryWrapper<>(new MoviePlan().setId(plan.getId())));
-  }
-
-  public void initSeat(MoviePlan plan) {
-    if (plan == null) return;
-    MovieHall hall =
-        movieHallMapper.selectOne(new QueryWrapper<>(new MovieHall().setId(plan.getHallId())));
-    if (hall == null) return;
+  private List<HallSeat> getHallSeats(MovieHall hall, Integer planId) {
+    if (hall == null) {
+      throw new RuntimeException("没有找到演出厅");
+    }
     int column = hall.getSeatColumn();
     int line = hall.getSeatLine();
+    List<HallSeat> hallSeats = new ArrayList<>(column * line);
     for (int i = 1; i <= column; i++)
       for (int j = 1; j <= line; j++) {
-        HallSeat hallSeat =
+        hallSeats.add(
             new HallSeat()
-                .setMoviePlanId(plan.getId())
+                .setMoviePlanId(planId)
                 .setSeatColumn(i)
                 .setSeatLine(j)
                 .setTicketStatus(1)
-                .setOrderId(-1);
-        hallSeatMapper.insert(hallSeat);
+                .setOrderId(-1));
       }
-  }
-
-  public void deleteSeat(Integer id) {
-    MoviePlan plan = moviePlanMapper.selectOne(new QueryWrapper<>(new MoviePlan().setId(id)));
-    if (plan == null) return;
-    MovieHall hall =
-        movieHallMapper.selectOne(new QueryWrapper<>(new MovieHall().setId(plan.getHallId())));
-    if (hall == null) return;
-    int column = hall.getSeatColumn();
-    int line = hall.getSeatLine();
-    for (int i = 1; i <= column; i++)
-      for (int j = 1; j <= line; j++) {
-        hallSeatMapper.delete(new QueryWrapper<>(new HallSeat().setSeatColumn(i).setSeatLine(j)));
-      }
-  }
-
-  public void delete(Integer id) {
-    moviePlanMapper.delete(new QueryWrapper<>(new MoviePlan().setId(id)));
+    return hallSeats;
   }
 
   @Override
-  public void newPlan(MoviePlan plan) {
-    insert(plan);
-    initSeat(plan);
+  @Transactional
+  public boolean newPlan(@NotNull MoviePlan plan) {
+    // 检测演出厅存在
+    long i =
+        movieHallMapper.selectCount(new QueryWrapper<>(new MovieHall().setId(plan.getHallId())));
+    if (i != 1L) {
+      log.error("[演出计划添加]演出厅不存在");
+      return false;
+    }
+    // 检测电影是否存在
+    i = movieMapper.selectCount(new QueryWrapper<>(new Movie().setId(plan.getCinemaMovieId())));
+    if (i != 1L) {
+      log.error("[演出计划添加]电影不存在");
+      return false;
+    }
+    // 检查演出计划是否重复
+    if (!moviePlanService.checkDate(plan)) {
+      log.error("[演出计划添加]日期冲突");
+      return false;
+    }
+    // 生成
+    moviePlanService.save(plan);
+    MovieHall hall =
+        movieHallMapper.selectOne(new QueryWrapper<>(new MovieHall().setId(plan.getHallId())));
+    getHallSeats(hall, plan.getId()).forEach(e -> hallSeatMapper.insert(e));
+    return true;
+  }
+
+  @Override
+  public void deleteAll(@NotNull List<Long> planIdList) {
+    for (Long id : planIdList) {
+      moviePlanService.deleteOne(Math.toIntExact(id));
+    }
+  }
+
+  @Transactional
+  public void deleteOne(@NotNull Integer planId) {
+    // 删除planId
+    moviePlanService.removeById(planId);
+    // 删除planId对应的座位
+    hallSeatMapper.delete(new QueryWrapper<>(new HallSeat().setMoviePlanId(planId)));
   }
 }

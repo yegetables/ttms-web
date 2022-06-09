@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import java.util.ArrayList;
+import java.util.Date;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -28,7 +29,7 @@ public class Movie extends Model<Movie> {
   private Integer movieStatus;
 
   /** 上映时间 */
-  private String movieStart;
+  private Date movieStart;
 
   /** 电影的时长 */
   private Integer movieMinute;

@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * (MovieHall)表实体类
+ * (MovieHall)表实体类 演出厅
  *
  * @author ajian
  * @since 2022-06-03 16:56:51

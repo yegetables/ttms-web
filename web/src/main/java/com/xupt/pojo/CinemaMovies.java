@@ -5,9 +5,11 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /** @since 2022-05-30 */
@@ -16,6 +18,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @TableName("cinema_movies")
 @AllArgsConstructor
+@NoArgsConstructor
 public class CinemaMovies extends Model<CinemaMovies> {
 
   private static final long serialVersionUID = 1L;
@@ -40,5 +43,5 @@ public class CinemaMovies extends Model<CinemaMovies> {
   private Double cinemaMovieMoney;
   /** 当天的日期 */
   @JsonFormat(pattern = "yyyy-MM-dd")
-  private String day;
+  private Date day;
 }

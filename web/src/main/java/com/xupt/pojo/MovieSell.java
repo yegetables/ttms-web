@@ -26,5 +26,5 @@ public class MovieSell extends Model<MovieSell> {
 
   private Integer sellId;
   // 售票员赚得钱
-  private Float sellMoney;
+  private Double sellMoney;
 }

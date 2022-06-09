@@ -7,15 +7,12 @@ import com.xupt.common.R;
 import com.xupt.pojo.Movie;
 import com.xupt.pojo.SortRuleType;
 import com.xupt.service.MovieService;
-import java.io.Serializable;
 import java.util.List;
 import javax.annotation.Resource;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Log4j2
 public class MovieController extends ApiController {
 
-  @Resource MovieService movieService;
+  @Resource private MovieService movieService;
 
   /**
    * 分页查询所有数据
@@ -40,9 +37,11 @@ public class MovieController extends ApiController {
    */
   @PostMapping
   public R selectAll(@RequestBody MovieAndPageAndSort<Movie> movieAndPageAndSort) {
+    if (movieAndPageAndSort == null) return failed("参数错误");
     try {
       if (movieAndPageAndSort.getSortRuleType() == null) {
         Page<Movie> page = movieAndPageAndSort.getPage();
+        if (page == null) return failed("page为空");
         Movie movie = movieAndPageAndSort.getMovie();
         return success(this.movieService.page(page, new QueryWrapper<>(movie)));
       }
@@ -56,17 +55,6 @@ public class MovieController extends ApiController {
   }
 
   /**
-   * 通过主键查询单条数据
-   *
-   * @param id 主键
-   * @return 单条数据
-   */
-  @GetMapping("{id}")
-  public R selectOne(@PathVariable Serializable id) {
-    return success(this.movieService.getById(id));
-  }
-
-  /**
    * 新增数据
    *
    * @param movie 实体对象
@@ -74,6 +62,7 @@ public class MovieController extends ApiController {
    */
   @PostMapping("/new")
   public R insert(@RequestBody Movie movie) {
+    if (movie == null) return failed("参数为空");
     boolean isSuccess = this.movieService.save(movie);
     if (isSuccess) {
       return success(movie);
@@ -89,6 +78,9 @@ public class MovieController extends ApiController {
    */
   @DeleteMapping
   public R delete(@RequestParam("idList") List<Long> idList) {
+    // TODO:delete plan,seat,order......
+    if (idList == null) return failed("参数为空");
+
     boolean isSuccess = this.movieService.removeByIds(idList);
     if (isSuccess) {
       return success("删除成功");
@@ -104,6 +96,7 @@ public class MovieController extends ApiController {
    */
   @PutMapping
   public R update(@RequestBody Movie movie) {
+    if (movie == null || movie.getId() == null) return failed("参数为空");
     boolean isSuccess = this.movieService.updateById(movie);
     if (isSuccess) {
       movie = this.movieService.getById(movie.getId());

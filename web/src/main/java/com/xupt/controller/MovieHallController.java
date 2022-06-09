@@ -4,16 +4,16 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xupt.common.ApiController;
 import com.xupt.common.R;
+import com.xupt.pojo.AreaCinemas;
 import com.xupt.pojo.MovieHall;
+import com.xupt.service.AreaCinemasService;
 import com.xupt.service.MovieHallService;
-import java.io.Serializable;
+import com.xupt.service.MoviePlanService;
 import java.util.List;
 import javax.annotation.Resource;
 import lombok.Data;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,6 +35,9 @@ public class MovieHallController extends ApiController {
   /** 服务对象 */
   @Resource private MovieHallService movieHallService;
 
+  @Resource private AreaCinemasService areaCinemasService;
+  @Resource private MoviePlanService moviePlanService;
+
   /**
    * 分页查询所有数据
    *
@@ -44,20 +47,11 @@ public class MovieHallController extends ApiController {
    */
   @PostMapping
   public R selectAll(@RequestBody MovieHallAndPage<MovieHall> movieHallAndPage) {
+    if (movieHallAndPage == null) return failed("参数错误");
     Page<MovieHall> page = movieHallAndPage.getPage();
+    if (page == null) return failed("参数错误");
     MovieHall movieHall = movieHallAndPage.getMovieHall();
     return success(this.movieHallService.page(page, new QueryWrapper<>(movieHall)));
-  }
-
-  /**
-   * 通过主键查询单条数据
-   *
-   * @param id 主键
-   * @return 单条数据
-   */
-  @GetMapping("{id}")
-  public R selectOne(@PathVariable Serializable id) {
-    return success(this.movieHallService.getById(id));
   }
 
   /**
@@ -68,6 +62,10 @@ public class MovieHallController extends ApiController {
    */
   @PostMapping("/new")
   public R insert(@RequestBody MovieHall movieHall) {
+    if (movieHall == null || movieHall.getCinemaId() == null || movieHall.getId() != null)
+      return failed("参数错误");
+    AreaCinemas areaCinemas = areaCinemasService.getById(movieHall.getCinemaId());
+    if (areaCinemas == null) return failed("电影院不存在");
     boolean isSuccess = this.movieHallService.save(movieHall);
     if (isSuccess) {
       return success(movieHall);
@@ -83,6 +81,10 @@ public class MovieHallController extends ApiController {
    */
   @PutMapping
   public R update(@RequestBody MovieHall movieHall) {
+    if (movieHall == null || movieHall.getCinemaId() == null || movieHall.getId() == null)
+      return failed("参数错误");
+    AreaCinemas areaCinemas = areaCinemasService.getById(movieHall.getCinemaId());
+    if (areaCinemas == null) return failed("电影院不存在");
     boolean isSuccess = this.movieHallService.updateById(movieHall);
     if (isSuccess) {
       movieHall = this.movieHallService.getById(movieHall.getId());
@@ -99,7 +101,7 @@ public class MovieHallController extends ApiController {
    */
   @DeleteMapping
   public R delete(@RequestParam("idList") List<Long> idList) {
-    boolean isSuccess = this.movieHallService.removeByIds(idList);
+    boolean isSuccess = movieHallService.deleteAll(idList);
     if (isSuccess) {
       return success("删除成功");
     }
