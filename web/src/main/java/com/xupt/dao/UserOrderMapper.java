@@ -1,10 +1,8 @@
 package com.xupt.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.xupt.configer.MybatisRedisCache;
 import com.xupt.pojo.UserOrder;
 import java.util.List;
-import org.apache.ibatis.annotations.CacheNamespace;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -13,7 +11,6 @@ import org.apache.ibatis.annotations.Param;
  * @author ajian
  * @since 2022-06-03 17:04:50
  */
-
 public interface UserOrderMapper extends BaseMapper<UserOrder> {
 
   /**

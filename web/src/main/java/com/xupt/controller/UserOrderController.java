@@ -21,6 +21,8 @@ import com.xupt.service.MoviePlanService;
 import com.xupt.service.MovieService;
 import com.xupt.service.UserOrderService;
 import com.xupt.service.UsersService;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.Resource;
 import lombok.AllArgsConstructor;
@@ -28,8 +30,8 @@ import lombok.Data;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,6 +72,32 @@ public class UserOrderController extends ApiController {
     return success(this.userOrderService.page(page, new QueryWrapper<>(userOrder)));
   }
 
+  @GetMapping("/getUserOrders")
+  public R getUserOrders(@RequestHeader("token") String token) {
+    Integer userId = getToken(token);
+    Users users = usersService.getOne(new QueryWrapper<Users>(new Users().setUid(userId)));
+    if (users == null) {
+      return failed("用户不存在");
+    }
+    List<UserOrder> userOrders =
+        userOrderService.list(new QueryWrapper<UserOrder>(new UserOrder().setUserId(userId)));
+    List<HallSeat> hallSeats = new ArrayList<>(userOrders.size());
+    for (UserOrder userOrder : userOrders) {
+      HallSeat hallSeat =
+          hallSeatService.getOne(
+              new QueryWrapper<HallSeat>(new HallSeat().setOrderId(userOrder.getId())));
+      hallSeats.add(hallSeat);
+    }
+    List<UserOrderAndHallSeat> userOrderAndSeats = new ArrayList<>(hallSeats.size());
+    for (int i = 0; i < hallSeats.size(); i++) {
+      UserOrderAndHallSeat UserOrderAndHallSeat = new UserOrderAndHallSeat();
+      UserOrderAndHallSeat.setHallSeat(hallSeats.get(i));
+      UserOrderAndHallSeat.setUserOrder(userOrders.get(i));
+      userOrderAndSeats.add(UserOrderAndHallSeat);
+    }
+    return success(userOrderAndSeats);
+  }
+
   //  /**
   //   * 新增数据
   //   *
@@ -90,26 +118,26 @@ public class UserOrderController extends ApiController {
   //    return failed("新增失败");
   //  }
 
-  /**
-   * 修改数据
-   *
-   * @param userOrder 实体对象
-   * @return 修改结果
-   */
-  @PutMapping
-  public R update(@RequestBody UserOrder userOrder) {
-    try {
-      // userid, planid, hallseat
-      boolean isSuccess = this.userOrderService.updateById(userOrder);
-      if (isSuccess) {
-        userOrder = this.userOrderService.getById(userOrder.getId());
-        return success(userOrder);
-      }
-    } catch (Exception e) {
-      return failed("修改失败" + e.getMessage());
-    }
-    return failed("修改失败");
-  }
+  //  /**
+  //   * 修改数据
+  //   *
+  //   * @param userOrder 实体对象
+  //   * @return 修改结果
+  //   */
+  //  @PutMapping
+  //  public R update(@RequestBody UserOrder userOrder) {
+  //    try {
+  //      // userid, planid, hallseat
+  //      boolean isSuccess = this.userOrderService.updateById(userOrder);
+  //      if (isSuccess) {
+  //        userOrder = this.userOrderService.getById(userOrder.getId());
+  //        return success(userOrder);
+  //      }
+  //    } catch (Exception e) {
+  //      return failed("修改失败" + e.getMessage());
+  //    }
+  //    return failed("修改失败");
+  //  }
 
   /**
    * 删除数据
@@ -119,12 +147,45 @@ public class UserOrderController extends ApiController {
    */
   @DeleteMapping
   public R delete(@RequestParam("idList") List<Long> idList) {
-    cinemaMoviesService.deleteTicket(idList);
-    return success(this.userOrderService.removeByIds(idList));
+    // order
+    // seat
+    // movieMoney
+    idList.forEach(
+        i -> {
+          UserOrder userOrder = this.userOrderService.getById(i);
+          try {
+            userOrderService.removeById(i);
+          } catch (Exception ignored) {
+          }
+          try {
+            HallSeat hallSeat =
+                hallSeatService.getOne(
+                    new QueryWrapper<HallSeat>(new HallSeat().setOrderId(Math.toIntExact(i))));
+            if (hallSeat != null) {
+              hallSeat.setOrderId(-1);
+              hallSeat.setTicketStatus(1);
+              hallSeatService.updateById(hallSeat);
+            }
+          } catch (Exception ignored) {
+          }
+          try {
+            Movie moive =
+                movieService.getOne(
+                    new QueryWrapper<Movie>(new Movie().setId(userOrder.getMovieId())));
+            if (moive != null) {
+              moive.setDayMoney(moive.getDayMoney() - userOrder.getOrderMoney());
+              moive.setMovieMoney(moive.getMovieMoney() - userOrder.getOrderMoney());
+              movieService.updateById(moive);
+            }
+          } catch (Exception ignored) {
+          }
+        });
+    return success("删除成功（order,seat。，movieMoney）");
   }
   /** 购票 */
   @PostMapping("/new/buyTicket")
-  public R buyTicket(@RequestHeader String token, @RequestBody UserOrderAndSeat userOrderAndSeat) {
+  public R buyTicket(
+      @RequestHeader String token, @RequestBody UserOrderAndSeatDto userOrderAndSeat) {
     if (userOrderAndSeat == null
         || userOrderAndSeat.getUserOrderDto() == null
         || userOrderAndSeat.getHallSeatDto() == null) {
@@ -152,24 +213,27 @@ public class UserOrderController extends ApiController {
     if (hallSeat == null) return failed("购票失败，座位不存在");
 
     UserOrder userOrder = new UserOrder().setUserId(user.getUid());
-    userOrder.setOrderMoney(userOrder.getOrderMoney());
+    userOrder.setOrderMoney(userOrderDto.getOrderMoney());
     userOrder.setOrderStatus("已生成");
+    userOrder.setPayTime(new Date());
     try {
       setPlanId(userOrder, plan.getId());
     } catch (Exception e) {
       failed(e.getMessage());
     }
-
-    boolean isSuccess = userOrderService.buyTicket(userOrder, hallSeat);
-    if (isSuccess) {
+    try {
+      userOrderService.buyTicket(userOrder, hallSeat);
       return success(userOrder);
+    } catch (Exception e) {
+      return failed("购票失败，请重试. " + e.getMessage());
     }
-    return failed("购票失败，请重试");
   }
 
   @DeleteMapping("/returnTicket")
-  public R returnTicket(@RequestHeader String token, @RequestBody UserOrder userOrder) {
+  public R returnTicket(@RequestHeader String token, @RequestParam("idList") List<Long> idList) {
     try {
+      if (idList.size() != 1) return failed("退票失败，只能退一张票");
+      UserOrder userOrder = userOrderService.getById(idList.get(0));
       if (userOrder == null || userOrder.getId() == null) return failed("退票失败");
       userOrder = userOrderService.getById(userOrder.getId());
       if (userOrder == null) return failed("订单不存在");
@@ -221,7 +285,7 @@ class UserOrderAndPage<T> {
 
 @Data
 @AllArgsConstructor
-class UserOrderAndSeat {
+class UserOrderAndSeatDto {
   private UserOrderDto userOrderDto;
   private HallSeatDto hallSeatDto;
 }
@@ -239,4 +303,10 @@ class HallSeatDto {
   private Integer seatLine;
   // 座位的列
   private Integer seatColumn;
+}
+
+@Data
+class UserOrderAndHallSeat {
+  private UserOrder userOrder;
+  private HallSeat hallSeat;
 }

@@ -89,14 +89,15 @@ public class CinemaMoviesServiceImpl extends ServiceImpl<CinemaMoviesMapper, Cin
       queryWrapper1.eq("cinema_id", userOrder.getCinemaId());
       queryWrapper1.eq("movie_id", userOrder.getMovieId());
       queryWrapper1.eq("day", day);
-      CinemaMovies cinemaMovies = cinemaMoviesMapper.selectOne(queryWrapper1);
-      cinemaMovies.setDayMoney(
-          bigDecimalUtils.subDouble(cinemaMovies.getDayMoney(), userOrder.getTicketMoney()));
-      cinemaMovies.setCinemaMovieMoney(
-          cinemaMovies.getCinemaMovieMoney() - userOrder.getTicketMoney());
-      QueryWrapper<CinemaMovies> queryWrapper2 = new QueryWrapper<>();
-      queryWrapper2.eq("id", cinemaMovies.getId());
-      cinemaMoviesMapper.update(cinemaMovies, queryWrapper2);
+      //      CinemaMovies cinemaMovies = cinemaMoviesMapper.selectOne(queryWrapper1);
+      //      cinemaMovies.setDayMoney(
+      //          bigDecimalUtils.subDouble(cinemaMovies.getDayMoney(),
+      // userOrder.getTicketMoney()));
+      //      cinemaMovies.setCinemaMovieMoney(
+      //          cinemaMovies.getCinemaMovieMoney() - userOrder.getTicketMoney());
+      //      QueryWrapper<CinemaMovies> queryWrapper2 = new QueryWrapper<>();
+      //      queryWrapper2.eq("id", cinemaMovies.getId());
+      //      cinemaMoviesMapper.update(cinemaMovies, queryWrapper2);
     }
   }
 

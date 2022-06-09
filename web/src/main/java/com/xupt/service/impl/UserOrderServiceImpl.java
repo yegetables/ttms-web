@@ -39,7 +39,7 @@ public class UserOrderServiceImpl extends ServiceImpl<UserOrderMapper, UserOrder
     userOrderMapper.insert(userOrder);
     hallSeat = hallSeatMapper.selectById(hallSeat.getId());
     if (hallSeat.getTicketStatus() == 0) {
-      throw new RuntimeException("影厅已售罄");
+      throw new IllegalArgumentException("座位已售罄");
     }
     hallSeat.setTicketStatus(0);
     hallSeat.setOrderId(userOrder.getId());
@@ -55,30 +55,33 @@ public class UserOrderServiceImpl extends ServiceImpl<UserOrderMapper, UserOrder
   }
 
   @Override
+  @Transactional
   public boolean returnTicket(UserOrder userOrder) {
+    // order
+    // hallseat
     //    try {
     int id = userOrder.getId();
     UserOrder order = userOrderMapper.selectById(id);
     if (order == null) {
       throw new RuntimeException("订单不存在");
     }
+    userOrderMapper.deleteById(id);
     HallSeat hallSeat = hallSeatMapper.selectOne(new QueryWrapper<>(new HallSeat().setOrderId(id)));
-    hallSeat.setOrderId(-1);
-    hallSeat.setTicketStatus(-1);
-    //      hallSeatMapper.update(hallSeat, );
-    //      QueryWrapper<UserOrder> orderQueryWrapper = new QueryWrapper<>();
-    //      orderQueryWrapper.eq("id", userOrder.getId());
-    //      userOrderMapper.delete(orderQueryWrapper);
-    //      QueryWrapper<Movie> movieQueryWrapper = new QueryWrapper<>();
-    //      movieQueryWrapper.eq("id", userOrder.getMovieId());
-    //      Movie movie = movieMapper.selectOne(movieQueryWrapper);
-    //      movie.setMovieMoney(
-    //          bigDecimalUtils.subDouble(movie.getMovieMoney(), userOrder.getOrderMoney()));
-    //      movieMapper.update(movie, movieQueryWrapper);
-    //      return true;
-    //    } catch (Exception e) {
-    //      return false;
-    //    }
-    return false;
+    if (hallSeat == null) {
+      throw new RuntimeException("座位不存在");
+    }
+    if (hallSeat.getTicketStatus() == 1) {
+      throw new RuntimeException("座位已退票");
+    } else if (hallSeat.getTicketStatus() == 0) {
+      hallSeat.setOrderId(-1);
+      hallSeat.setTicketStatus(1);
+    }
+    hallSeatMapper.updateById(hallSeat);
+
+    Movie moive = movieMapper.selectOne(new QueryWrapper<>(new Movie().setId(order.getMovieId())));
+    moive.setDayMoney(moive.getDayMoney() - userOrder.getOrderMoney());
+    moive.setMovieMoney(moive.getMovieMoney() - userOrder.getOrderMoney());
+    movieMapper.updateById(moive);
+    return true;
   }
 }

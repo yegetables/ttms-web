@@ -1,5 +1,7 @@
 package com.xupt.controller;
 
+import static com.xupt.interceptor.loginInterceptor.getToken;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xupt.common.ApiController;
@@ -8,17 +10,16 @@ import com.xupt.pojo.Users;
 import com.xupt.service.UsersService;
 import com.xupt.utils.PHPass;
 import com.xupt.utils.UsersUtils;
-import java.io.Serializable;
 import java.util.List;
 import javax.annotation.Resource;
 import lombok.Data;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -61,11 +62,16 @@ public class UsersController extends ApiController {
    * @param id 主键
    * @return 单条数据
    */
-  @GetMapping("{id}")
-  public R selectOne(@PathVariable Serializable id) {
-    var u = this.usersService.getById(id);
-    UsersUtils.removeSecret(u);
-    return success(u);
+  @GetMapping("/getUserInfo")
+  public R selectOne(@RequestHeader String token) {
+    if (token == null) return failed("token为空");
+    Integer userId = getToken(token);
+    Users users = usersService.getOne(new QueryWrapper<Users>(new Users().setUid(userId)));
+    if (users == null) {
+      return failed("用户不存在");
+    }
+    UsersUtils.removeSecret(users);
+    return success(users);
   }
 
   /**
