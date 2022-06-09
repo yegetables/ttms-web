@@ -13,7 +13,7 @@ import org.apache.ibatis.annotations.Param;
  * @author ajian
  * @since 2022-06-03 17:04:50
  */
-@CacheNamespace(implementation = MybatisRedisCache.class, eviction = MybatisRedisCache.class)
+
 public interface UserOrderMapper extends BaseMapper<UserOrder> {
 
   /**

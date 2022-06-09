@@ -11,5 +11,5 @@ import org.apache.ibatis.annotations.CacheNamespace;
  * @author ajian
  * @since 2022-06-03 14:37:43
  */
-@CacheNamespace(implementation = MybatisRedisCache.class, eviction = MybatisRedisCache.class)
+
 public interface HallSeatMapper extends BaseMapper<HallSeat> {}

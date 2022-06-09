@@ -11,7 +11,7 @@ import org.apache.ibatis.annotations.CacheNamespace;
  *
  * @since 2022-05-30
  */
-@CacheNamespace(implementation = MybatisRedisCache.class, eviction = MybatisRedisCache.class)
+
 public interface MoviePlanMapper extends BaseMapper<MoviePlan> {
   List<MoviePlan> getMovieListByDate(String date1, String date2);
 }

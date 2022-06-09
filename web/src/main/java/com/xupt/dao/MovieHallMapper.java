@@ -13,7 +13,7 @@ import org.apache.ibatis.annotations.Param;
  * @author ajian
  * @since 2022-06-03 16:47:20
  */
-@CacheNamespace(implementation = MybatisRedisCache.class, eviction = MybatisRedisCache.class)
+
 public interface MovieHallMapper extends BaseMapper<MovieHall> {
 
   /**

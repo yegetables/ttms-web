@@ -10,5 +10,5 @@ import org.apache.ibatis.annotations.CacheNamespace;
  *
  * @since 2022-05-30
  */
-@CacheNamespace(implementation = MybatisRedisCache.class, eviction = MybatisRedisCache.class)
+
 public interface ProvinceMapper extends BaseMapper<Province> {}
