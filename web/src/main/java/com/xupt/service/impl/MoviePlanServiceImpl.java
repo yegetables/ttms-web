@@ -11,11 +11,11 @@ import com.xupt.pojo.Movie;
 import com.xupt.pojo.MovieHall;
 import com.xupt.pojo.MoviePlan;
 import com.xupt.service.MoviePlanService;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Resource;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,38 +28,31 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class MoviePlanServiceImpl extends ServiceImpl<MoviePlanMapper, MoviePlan>
     implements MoviePlanService {
-  @Autowired @Lazy MoviePlanServiceImpl moviePlanService;
+  @Resource @Lazy MoviePlanServiceImpl moviePlanService;
   @Resource HallSeatMapper hallSeatMapper;
   @Resource MoviePlanMapper moviePlanMapper;
-
   @Resource MovieHallMapper movieHallMapper;
   @Resource MovieMapper movieMapper;
 
   private boolean checkDate(MoviePlan plan) {
-    //    QueryWrapper<MoviePlan> queryWrapper = new QueryWrapper<>();
-    //    queryWrapper
-    //        .between(
-    //            "movie_start_time",
-    //            plan.getMovieStartTime().toString(),
-    //            plan.getMovieEndTime().toString())
-    //        .or()
-    //        .between(
-    //            "movie_end_time",
-    //            plan.getMovieStartTime().toString(),
-    //            plan.getMovieEndTime().toString());
-    //
-    //    new LambdaQueryWrapper<MoviePlan>()
-    //        .apply(plan.getMovieStartTime(),
-    //            "date_format (create_time,'%Y-%m-%d') >= date_format('" + start_date +
-    // "','%Y-%m-%d')")
-    //        .apply(StrUtil.isNotBlank(end_date),
-    //            "date_format (create_time,'%Y-%m-%d') <= date_format('" + end_date +
-    // "','%Y-%m-%d')")
-    //        .orderByDesc(HmsFaceDetectLog::getOptime));
-
-    //    long count = moviePlanMapper.selectCount(queryWrapper);
-    //    return count == 0;
-    return true;
+    SimpleDateFormat sdfAll = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    String start = sdfAll.format(plan.getMovieStartTime());
+    String end = sdfAll.format(plan.getMovieEndTime());
+    String planDate = sdf.format(plan.getPlanDate());
+    QueryWrapper<MoviePlan> queryWrapper = new QueryWrapper<>();
+    queryWrapper
+        .lambda()
+        .between(MoviePlan::getMovieStartTime, plan.getMovieStartTime(), plan.getMovieEndTime())
+        .or()
+        .between(MoviePlan::getMovieEndTime, plan.getMovieStartTime(), plan.getMovieEndTime())
+        .and(wrapper -> wrapper.eq(MoviePlan::getHallId, plan.getHallId()));
+    List<MoviePlan> plans = moviePlanService.list(queryWrapper);
+    if (plans.size() == 0) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @Transactional
@@ -106,7 +99,7 @@ public class MoviePlanServiceImpl extends ServiceImpl<MoviePlanMapper, MoviePlan
       return false;
     }
     // 检查演出计划是否重复
-    if (!moviePlanService.checkDate(plan)) {
+    if (!checkDate(plan)) {
       log.error("[演出计划添加]日期冲突");
       return false;
     }
