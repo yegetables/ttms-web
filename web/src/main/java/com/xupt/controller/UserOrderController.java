@@ -212,9 +212,13 @@ public class UserOrderController extends ApiController {
                     .setMoviePlanId(plan.getId())));
     if (hallSeat == null) return failed("购票失败，座位不存在");
 
+    if (new Date().after(plan.getMovieStartTime())) {
+      return failed("演出已开始");
+    }
+
     UserOrder userOrder = new UserOrder().setUserId(user.getUid());
     userOrder.setOrderMoney(userOrderDto.getOrderMoney());
-    userOrder.setOrderStatus("已生成");
+    userOrder.setOrderStatus("已购买");
     userOrder.setPayTime(new Date());
     try {
       setPlanId(userOrder, plan.getId());
@@ -237,6 +241,11 @@ public class UserOrderController extends ApiController {
       if (userOrder == null || userOrder.getId() == null) return failed("退票失败");
       userOrder = userOrderService.getById(userOrder.getId());
       if (userOrder == null) return failed("订单不存在");
+
+      if (new Date().after(userOrder.getMovieStartTime())) {
+        throw new RuntimeException("演出已开始,不能退票");
+      }
+
       Integer userId = getToken(token);
       if (userId == null) return failed("退票失败");
       if (!userId.equals(userOrder.getUserId())) return failed("您无权操作");
