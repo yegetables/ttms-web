@@ -1,14 +1,16 @@
-logging.config=web/src/main/resources/log4j2.xml
-logging.level.org.springframework.boot.autoconfigure: info
+server.port=80
+logging.config=classpath:log4j2.xml
+logging.level.org.springframework.boot.autoconfigure:info
+
 # datasource
-spring.datasource.username=root
-spring.datasource.password=651223
-spring.datasource.url=jdbc:mysql://localhost:3306/ttms?useUnicode=true&characterEncoding=utf8&useSSL=false
+spring.datasource.username=ajian
+spring.datasource.password=123456
+spring.datasource.url=jdbc:mysql://127.0.0.1:3306/ttms?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=CONVERT_TO_NULL
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 mybatis.mapper-locations=classpath:mapper/*.xml
 
 # redis
-spring.redis.password=1254125
+spring.redis.password=1241423
 spring.redis.host=localhost
 spring.redis.port=6379
 
@@ -21,27 +23,27 @@ spring.redis.jedis.pool.test-on-borrow=true
 spring.redis.jedis.pool.test-while-idle=true
 
 # mybatis plus
-mybatis-plus.configuration.map-underscore-to-camel-case=false
-mybatis-plus.global-config.db-column-underline=false
+mybatis-plus.configuration.map-underscore-to-camel-case=true
+mybatis-plus.global-config.db-column-underline=true
 
-# 发信邮箱
+# mail
 mail.host=smtp.126.com
-mail.username=abcedfg@126.com
-mail.password=123456
+mail.username=ajaaaaaaa@126.com
+mail.password=asl;fgkoagfkasogk
 mail.subject=TTMS-web AuthCode
 mail.defaultEncoding=utf-8
 mail.port=465
 
 # oos
-oos.endpoint: oss-cn-beijing.aliyuncs.com
-oos.keyid: 1234523634
-oos.keysecret: aasdhgsdrhsrtrhjs
-oos.bucketname: presist
-oos.filehost: head
+oos.endpoint:oss-cn-beijing.aliyuncs.com
+oos.keyid:123255235325233
+oos.keysecret:l;askgosgseogjsawr
+oos.bucketname:presist
+oos.filehost:head
 
 # authCode
-codeSend.secretId=azsglkasegklsdfjghaws
-codeSend.secretKey=sdlkngasdophoserh
+codeSend.secretId=AKIDasl;gasdkogjkdsghskg5
+codeSend.secretKey=5sd;glasdg;sdgkseb4GY
 
 # redis-cache
 spring.cache.cache-names=redisCache1
@@ -50,3 +52,7 @@ spring.cache.redis.cache-null-values=true
 spring.cache.redis.key-prefix=ttms
 spring.cache.redis.time-to-live=
 spring.cache.redis.use-key-prefix=true
+mybatis-plus.configuration.cache-enabled=true
+
+# time
+spring.jackson.time-zone=GMT+8
