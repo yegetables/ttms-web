@@ -5,4 +5,4 @@ mv target/web-0.0.1-SNAPSHOT.jar ./web.jar
 #scp server.sh huawei:~
 #scp Dockerfile huawei:~
 #ssh huawei "~/server.sh"
-bash server.sh
+/bin/bash server.sh
