@@ -3,6 +3,8 @@ package com.xupt.interceptor;
 import com.xupt.utils.RedisUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import java.util.Arrays;
+import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,10 +43,15 @@ public class loginInterceptor implements HandlerInterceptor {
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
       throws Exception {
     log.info("===》请求的url：" + request.getRequestURI());
-    if (request.getRequestURI().contains("/login")
-        || request.getRequestURI().contains("/register")
-        || request.getRequestURI().endsWith("/movie")
-        || request.getRequestURI().contains("/static")) return true;
+    List<String> allowed = Arrays.asList("/", "/index.html", "/favicon.ico", "/login403");
+    //    List<String> refused = Arrays.asList("/users", "/userOrder", "");
+
+    if (allowed.contains(request.getRequestURI())
+        || request.getRequestURI().startsWith("/static/")
+        || (request.getRequestURI().equals("/movie") && request.getMethod().equals("POST"))
+        || request.getRequestURI().contains("/login")
+        || request.getRequestURI().contains("/register")) return true;
+
     final String headerToken = request.getHeader("token");
     log.info("获得token:" + headerToken);
     if (null == headerToken || headerToken.trim().equals("")) {

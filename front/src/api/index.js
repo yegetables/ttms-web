@@ -1,17 +1,18 @@
 //请求的方法
 import axios from 'axios'
 import base from './base'
-axios.defaults.baseURL = 'http://124.71.197.6:8080'
+// axios.defaults.baseURL = 'http://124.71.197.6:8080'
+axios.defaults.baseURL = 'http://124.71.197.6:80'
 // axios.defaults.baseURL = 'http://192.168.43.225:8080'
 
 const api = {
   //买票
-  buyTicket(data){
-    return axios.post('/userOrder/new/buyTicket',data)
+  buyTicket(data) {
+    return axios.post('/userOrder/new/buyTicket', data)
   },
   //获取手机验证码
-  getCode(data){
-    return axios.post('/login/codePhoneSend',data)
+  getCode(data) {
+    return axios.post('/login/codePhoneSend', data)
   },
   //注册
   register(data){
