@@ -1,5 +1,10 @@
 module.exports = {
   transpileDependencies: true,
+  //打包配置文件
+  assetsDir: 'static',
+  parallel: false,
+  publicPath: './',
+
   // devServer: {
   //   proxy: {// API代理
   //     '/api': {
