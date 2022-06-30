@@ -1,0 +1,12 @@
+.idea
+.git
+.vscode
+front/dist
+front/node_modules
+front/package.json
+front/package-lock.json
+front/front.iml
+web/target
+web/web.iml
+web/web.jar
+web/src/main/resources/static
