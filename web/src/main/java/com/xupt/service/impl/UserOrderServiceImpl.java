@@ -15,6 +15,8 @@ import com.xupt.utils.BigDecimalUtils;
 import com.xupt.utils.RedisUtils;
 import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -33,7 +35,7 @@ public class UserOrderServiceImpl extends ServiceImpl<UserOrderMapper, UserOrder
   @Resource MoviePlanMapper moviePlanMapper;
   @Resource BigDecimalUtils bigDecimalUtils;
 
-  @Transactional
+  @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED)
   public boolean buyTicket(UserOrder userOrder, HallSeat hallSeat) {
 
     userOrderMapper.insert(userOrder);
