@@ -13,6 +13,10 @@
       <el-menu-item>
         <span slot="title">西柚影院后台管理系统</span>
       </el-menu-item>
+      <el-menu-item index="/">
+        <i class="el-icon-menu"></i>
+        <span slot="title">前台</span>
+      </el-menu-item>
       <el-menu-item index="/admin">
         <i class="el-icon-menu"></i>
         <span slot="title">首页</span>

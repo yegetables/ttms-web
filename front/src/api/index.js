@@ -2,7 +2,7 @@
 import axios from 'axios'
 import base from './base'
 // axios.defaults.baseURL = 'http://124.71.197.6:8080'
-axios.defaults.baseURL = 'http://124.71.197.6:80'
+axios.defaults.baseURL = 'http://121.37.71.194:80'
 // axios.defaults.baseURL = 'http://192.168.43.225:8080'
 
 const api = {
@@ -165,7 +165,6 @@ axios.interceptors.request.use(
     if (localStorage.getItem('user') == null) {
       // window.location.href = '/loginPage'
     } else {
-
       config.headers['token'] = JSON.parse(localStorage.getItem('user')).token
     }
 

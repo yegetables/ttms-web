@@ -10,16 +10,18 @@
           <el-menu-item index="/">首页</el-menu-item>
           <el-menu-item index="/film">电影</el-menu-item>
           <el-menu-item index="/list">榜单</el-menu-item>
+          <el-menu-item v-if='isAdmin' index="/admin">后台管理系统</el-menu-item>
         </el-menu>
       </div>
-      <div v-if="true" class="user">
-        <router-link to="/login2">登录</router-link>
-        
-        <router-link to="/register">注册</router-link>
-        <router-link to="/profile">我的</router-link>
-      </div>
-      <div v-else class="user">
-        欢迎
+      <div class="user">
+        <div  v-if="phoneNum">
+          <router-link to="/profile">{{ phoneNum }}</router-link>
+          <span @click="loginOut" style="margin-left:10px;font-size: 14px;color: rgb(116, 117, 118);">退出登录</span>
+        </div>
+        <div v-else>
+          <router-link to="/login">登录</router-link>
+          <router-link to="/register">注册</router-link>
+        </div>
       </div>
     </div>
     <div class="content">
@@ -34,8 +36,29 @@
     data() {
       return {
         activeIndex: '1',
+        isAdmin:false,
+        phoneNum:''
       };
     },
+    mounted(){
+      if(localStorage.getItem('user')){
+        if(JSON.parse(localStorage.getItem('user')).phoneNum === 'admin'){
+          this.phoneNum = 'admin'
+          this.isAdmin = true
+        }else{
+          if(JSON.parse(localStorage.getItem('user')).phoneNum){
+            this.phoneNum = JSON.parse(localStorage.getItem('user')).phoneNum
+          }
+          this.isAdmin = false
+        }
+      }
+    },
+    methods:{
+      loginOut(){
+        localStorage.removeItem('user')
+        this.$router.push('/login')
+      }
+    }
   }
 </script>
 

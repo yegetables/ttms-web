@@ -64,17 +64,21 @@
             console.log(this.loginForm);
             // 请求登录接口
             this.$api.byPassword(this.loginForm).then(res =>{
-              console.log(res);
+              // console.log(res);
               if(res.data.status==0){
                 //  登陆成功后 1.存储登录信息 2.跳转网页 3.顶部区域显示用户信息 4.持久化
-                let obj ={
-                  phoneNum:res.data.data.phoneNum,
-                  token:res.headers.token
+                let obj={}
+                if(res.data.msg === '管理员登录'){
+                  obj.token = res.headers.token
+                  obj.phoneNum = 'admin'
+                }else {
+                  obj.phoneNum=res.data.data.phoneNum,
+                  obj.token=res.headers.token
                 }
                 this.setUser(obj)
                 // 存储本地
                 localStorage.setItem('user',JSON.stringify(obj))
-                this.$router.push('/admin')
+                this.$router.push('/')
                 this.$message({
                   message: '恭喜你，登录成功',
                   type: 'success'
